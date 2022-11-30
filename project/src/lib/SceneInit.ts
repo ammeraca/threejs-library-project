@@ -3,7 +3,7 @@ import { AmbientLight, Clock, DirectionalLight, PerspectiveCamera, Scene, WebGLR
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
 export default class SceneInit {
-  constructor(canvasId) {
+  constructor(canvasId: string) {
     this.scene = new Scene();
     this.camera = new PerspectiveCamera(
       45,
