@@ -1,23 +1,37 @@
-import { useEffect } from 'react';
-import { BoxGeometry, Mesh, MeshNormalMaterial, SphereGeometry } from 'three';
+import { useEffect, useRef } from "react";
+import { BoxGeometry, Mesh, MeshNormalMaterial, PerspectiveCamera, Scene, WebGLRenderer } from "three";
 
-import SceneInit from './lib/SceneInit';
-
-function App() {
+const App = () => {
   useEffect(() => {
-    const test = new SceneInit('myThreeJsCanvas');
-    test.initialize();
-    test.animate();
-
-    const sphere = new SphereGeometry();
-    const mesh = new Mesh(sphere, new MeshNormalMaterial());
-
-    test.scene.add(mesh);
+    
+    var scene = new Scene();
+    var camera = new PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 );
+    var renderer = new WebGLRenderer();
+    
+    renderer.setSize( window.innerWidth, window.innerHeight );
+    
+    document.body.appendChild( renderer.domElement );
+    
+    var geometry = new BoxGeometry( 1, 1, 1 );
+    var material = new MeshNormalMaterial();
+    var cube = new Mesh( geometry, material );
+    
+    scene.add( cube );
+    camera.position.z = 5;
+    
+    var animate = function () {
+      requestAnimationFrame( animate );
+      cube.rotation.x += 0.01;
+      cube.rotation.y += 0.01;
+      renderer.render( scene, camera );
+    };
+    
+    animate();
   }, []);
 
   return (
     <div>
-      <canvas id="myThreeJsCanvas" />
+
     </div>
   );
 }
