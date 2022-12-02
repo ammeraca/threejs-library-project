@@ -41,6 +41,12 @@
       "last 1 safari version"
     ]
   },
+  "prettier": {
+    "singleQuote": true,
+    "semi": false,
+    "useTabs": true,
+    "printWidth": 120
+  },
   "devDependencies": {
     "@types/three": "^0.146.0"
   }
