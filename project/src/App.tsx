@@ -1,17 +1,22 @@
 import {
+	AdditiveBlending,
 	AmbientLight,
 	AnimationMixer,
 	AxesHelper,
+	BackSide,
 	BoxGeometry,
 	Color,
 	DirectionalLight,
+	FrontSide,
 	Mesh,
 	MeshBasicMaterial,
+	MeshStandardMaterial,
 	PerspectiveCamera,
 	Raycaster,
 	ReinhardToneMapping,
 	Scene,
 	ShaderMaterial,
+	Side,
 	Vector2,
 	WebGLRenderer,
 } from 'three'
@@ -56,7 +61,7 @@ const App = () => {
 
 		setControls()
 
-		const dir = new DirectionalLight(0xffffff, 1)
+		const dir = new DirectionalLight(0xffffff, 5)
 		dir.position.set(-20, 40, 40)
 		dir.shadow.mapSize.set(8192, 8192)
 		dir.castShadow = true
@@ -64,7 +69,7 @@ const App = () => {
 
 		renderer.toneMapping = ReinhardToneMapping
 
-		const darkMaterial = new MeshBasicMaterial({ color: 'black' })
+		const darkMaterial = new MeshStandardMaterial({ color: 'black' })
 		let materials: { [x: string]: any } = {}
 
 		const renderScene = new RenderPass(scene, camera)
@@ -95,7 +100,9 @@ const App = () => {
 			raycaster.setFromCamera(mouse, camera)
 			const intersects = raycaster.intersectObjects(scene.children, false)
 			if (intersects.length > 0) {
-				const object = intersects[0].object
+				const object = intersects[0].object as Mesh
+				if (object.name === 'book') scene.add(bookGlow)
+				else scene.remove(bookGlow)
 			}
 		}
 
@@ -120,13 +127,33 @@ const App = () => {
 				console.error(e)
 			}
 		)
-		const book = new Mesh(
-			new BoxGeometry(200 / 15, 300 / 15, 50 / 15),
-			new MeshBasicMaterial({ color: new Color(0x448f44) })
-		)
+
+		var customMaterial = new ShaderMaterial({
+			uniforms: {
+				c: { value: 0.05 },
+				p: { value: 4.5 },
+				glowColor: { value: new Color(0xfaaaa0) },
+				viewVector: { value: camera.position },
+			},
+			vertexShader: document.getElementById('vertexShader')!.textContent!,
+			fragmentShader: document.getElementById('fragmentShader')!.textContent!,
+			side: FrontSide,
+			blending: AdditiveBlending,
+			transparent: true,
+		})
+
+		const bookGeom = new BoxGeometry(200 / 15, 300 / 15, 50 / 15)
+
+		const book = new Mesh(bookGeom.clone(), new MeshBasicMaterial({ color: new Color(0x448f44) }))
+
 		book.rotateY(-Math.PI / 8)
 		book.position.set(20, 45, 20)
 		book.name = 'book'
+
+		const bookGlow = new Mesh(bookGeom.clone(), customMaterial.clone())
+		bookGlow.position.set(book.position.x, book.position.y, book.position.z)
+		bookGlow.rotation.set(book.rotation.x, book.rotation.y, book.rotation.z)
+		bookGlow.scale.multiplyScalar(1.2)
 		scene.add(book)
 
 		const currentRef = mountRef.current! as HTMLElement
