@@ -51,8 +51,7 @@ export class Example {
   constructor(renderer: WebGLRenderer) {
     this._renderer = renderer;
     this._scene = new Scene();
-    this._cam = new PerspectiveCamera(45);
-    this._cam.position.set(0, 0.25, 1.75);
+    this._cam = new PerspectiveCamera();
 
     this._gui = new GUI();
     this._gui.hide();
@@ -66,7 +65,7 @@ export class Example {
    * This is called each time you switch example
    */
   public initialize() {
-    this._gui.show();
+    //this._gui.show();
   }
 
   /**

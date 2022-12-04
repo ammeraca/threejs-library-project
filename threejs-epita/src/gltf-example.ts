@@ -54,27 +54,7 @@ export default class GLTFExample extends Example {
 
 		window.addEventListener('pointerdown', this.onPointerDown)
 
-		const dracoLoader = new DRACOLoader()
-		dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.4.3/')
-
-		const loader = new GLTFLoader()
-		loader.setDRACOLoader(dracoLoader)
-		const bookcase_path = 'assets/models/bookcase/scene.gltf'
-		loader.load(
-			bookcase_path,
-			(gltf) => {
-				const mixer = new AnimationMixer(gltf.scene)
-				gltf.animations.forEach((clip) => {
-					mixer.clipAction(clip).play()
-				})
-				gltf.scene.scale.set(50, 50, 50)
-				this._scene.add(gltf.scene)
-			},
-			undefined,
-			function (e) {
-				console.error(e)
-			}
-		) 
+		this.gltfLoader(); 
 
 		this.books.book.rotateY(-Math.PI / 8)
 		this.books.book.position.set(0.2, 0.45, 0.2)
@@ -84,26 +64,8 @@ export default class GLTFExample extends Example {
 		this.books.bookGlow.position.set(this.books.book.position.x, this.books.book.position.y, this.books.book.position.z)
 		this.books.bookGlow.rotation.set(this.books.book.rotation.x, this.books.book.rotation.y, this.books.book.rotation.z)
 		this.books.bookGlow.scale.multiplyScalar(1.2)
-  }
 
-  
-  public onPointerDown(event: MouseEvent) {
-    mouse.x = (event.clientX / window.innerWidth) * 2 - 1
-    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1
-
-    if(this._raycaster){
-      this._raycaster.setFromCamera(mouse, this._cam)
-      const intersects = this._raycaster.intersectObjects(this._scene.children, false)
-      if (intersects.length > 0) {
-        const object = intersects[0].object as Mesh
-        if (object.name === 'book') console.log(object)
-        else this._scene.remove(this.books.bookGlow)
-      }
-    }
-  }
-
-  public resize(w: number, h: number): void {
-    super.resize(w,h);
+    this.rotateOnScroll();
   }
 
   public destroy(): void {
@@ -112,7 +74,6 @@ export default class GLTFExample extends Example {
 
   public update(delta: number): void {
     this.controls.update();
-    
   }
 
   public render(): void {
@@ -126,16 +87,64 @@ export default class GLTFExample extends Example {
     }
   }
 
-  public setControls(){
-		this.controls = new OrbitControls(this._cam, this._renderer.domElement)
-		this.controls.target.set(0, 0.5, 0)
-		this.controls.enablePan = false
-		this.controls.minPolarAngle = Math.PI / 2.4
-		this.controls.maxPolarAngle = Math.PI / 2.15
-		this.controls.minDistance = 1
-	  this.controls.maxDistance = 100
-		this.controls.enableDamping = true
-		this.controls.rotateSpeed = 0.6
-		this.controls.enableZoom = false
-	}
+  private gltfLoader() {
+    const dracoLoader = new DRACOLoader();
+    dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.4.3/');
+
+    const loader = new GLTFLoader();
+    loader.setDRACOLoader(dracoLoader);
+    const bookcase_path = 'assets/models/bookcase/scene.gltf';
+    loader.load(
+      bookcase_path,
+      (gltf) => {
+        const mixer = new AnimationMixer(gltf.scene);
+        gltf.animations.forEach((clip) => {
+          mixer.clipAction(clip).play();
+        });
+        gltf.scene.scale.set(50, 50, 50);
+        this._scene.add(gltf.scene);
+      },
+      undefined,
+      function (e) {
+        console.error(e);
+      }
+    );
+  }
+
+  private rotateOnScroll() {
+    window.addEventListener('wheel', (event: WheelEvent) => {
+      if (event.deltaY > 0) {
+        this._scene.rotateY(-0.02);
+      } else {
+        this._scene.rotateY(0.02);
+      }
+    });
+  }
+
+  private setControls() {
+    this.controls.target.set(0, 0.5, 0);
+    this.controls.enablePan = false;
+    this.controls.minPolarAngle = Math.PI / 2.4;
+    this.controls.maxPolarAngle = Math.PI / 2.15;
+    this.controls.minDistance = 1;
+    this.controls.maxDistance = 100;
+    this.controls.enableDamping = true;
+    this.controls.rotateSpeed = 0.6;
+    this.controls.enableZoom = false;
+  }
+
+  private onPointerDown(event: MouseEvent) {
+    mouse.x = (event.clientX / window.innerWidth) * 2 - 1
+    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1
+
+    if(this._raycaster){
+      this._raycaster.setFromCamera(mouse, this._cam)
+      const intersects = this._raycaster.intersectObjects(this._scene.children, false)
+      if (intersects.length > 0) {
+        const object = intersects[0].object as Mesh
+        if (object.name === 'book') console.log(object)
+        else this._scene.remove(this.books.bookGlow)
+      }
+    }
+  }
 }
