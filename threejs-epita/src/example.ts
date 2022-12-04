@@ -48,7 +48,7 @@ export class Example {
 		this._renderer = renderer
 		this._scene = new Scene()
 		this._cam = new PerspectiveCamera(45)
-		// this._cam.position.set(0, 25, 175)
+		this._cam.position.set(0, 25, 175)
 
 		this._gui = new GUI()
 		this._gui.hide()
