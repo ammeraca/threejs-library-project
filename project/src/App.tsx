@@ -130,8 +130,8 @@ const App = () => {
 
 		var customMaterial = new ShaderMaterial({
 			uniforms: {
-				c: { value: 0.05 },
-				p: { value: 4.5 },
+				c: { value: 0.1 },
+				p: { value: 1 },
 				glowColor: { value: new Color(0xfaaaa0) },
 				viewVector: { value: camera.position },
 			},
@@ -189,9 +189,9 @@ const App = () => {
 
 		window.addEventListener('wheel', function (event: WheelEvent) {
 			if (event.deltaY > 0) {
-				scene.rotateY(-Math.PI / 8)
+				scene.rotateY(-0.02)
 			} else {
-				scene.rotateY(Math.PI / 8)
+				scene.rotateY(0.02)
 			}
 		})
 
