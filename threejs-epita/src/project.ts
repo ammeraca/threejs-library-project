@@ -19,11 +19,14 @@ import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader'
 import { Example } from './example'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+import gsap from 'gsap'
 
 let mouse = new Vector2()
 export default class GLTFExample extends Example {
 	controls = new OrbitControls(this._cam, this._renderer.domElement)
 	private _raycaster: Raycaster
+	private bookSelected: Mesh | null = null
+	private bookSelectedInitialPosition: Vector3 = new Vector3()
 	// mixer = new AnimationMixer();
 
 	bookGeom = new BoxGeometry(200 / 15, 300 / 15, 50 / 15)
@@ -51,6 +54,46 @@ export default class GLTFExample extends Example {
 
 		this._raycaster = new Raycaster()
 		document.addEventListener('mousemove', this.onMouseMove, false)
+		document.addEventListener(
+			'click',
+			() => {
+				if (this.bookSelected == null) {
+					this._raycaster.setFromCamera(mouse, this._cam)
+					const intersects = this._raycaster.intersectObjects(this._scene.children, false)
+					if (intersects.length > 0) {
+						const object = intersects[0].object as Mesh
+						this.bookSelected = object
+						this.bookSelectedInitialPosition = object.position.clone()
+						const newX = (this._cam.position.x + object.position.x) / 2
+						const newY = (this._cam.position.y + object.position.y) / 2
+						const newZ = (this._cam.position.z + object.position.z) / 2
+						gsap.to(object.position, {
+							duration: 1,
+							x: newX,
+							y: newY,
+							z: newZ,
+						})
+					}
+				} else {
+					this._raycaster.setFromCamera(mouse, this._cam)
+					const intersects = this._raycaster.intersectObjects(this._scene.children, false)
+					if (intersects.length > 0) {
+						const object = intersects[0].object as Mesh
+
+						if (object == this.bookSelected) {
+							gsap.to(this.bookSelected.position, {
+								duration: 1,
+								x: this.bookSelectedInitialPosition.x,
+								y: this.bookSelectedInitialPosition.y,
+								z: this.bookSelectedInitialPosition.z,
+							})
+							this.bookSelected = null
+						}
+					}
+				}
+			},
+			true
+		)
 	}
 
 	public initialize() {
@@ -99,8 +142,14 @@ export default class GLTFExample extends Example {
 		const intersects = this._raycaster.intersectObjects(this._scene.children, false)
 		if (intersects.length > 0) {
 			const object = intersects[0].object as Mesh
-			if (object.name === 'book') this._scene.add(this.books.bookGlow)
-			else this._scene.remove(this.books.bookGlow)
+			if (object.name === 'book') {
+				this._scene.add(this.books.bookGlow)
+				this.books.bookGlow.position.set(
+					this.books.book.position.x,
+					this.books.book.position.y,
+					this.books.book.position.z
+				)
+			} else this._scene.remove(this.books.bookGlow)
 		} else {
 			this._scene.remove(this.books.bookGlow)
 		}
