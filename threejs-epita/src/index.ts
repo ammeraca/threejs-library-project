@@ -2,7 +2,7 @@ import { Clock, Color, WebGLRenderer } from 'three';
 import { Example } from './example';
 
 // @ts-ignore
-const modules = import.meta.glob('./*-example.ts');
+const modules = import.meta.glob('./project.ts');
 
 /**
  * Extracts the modules found in `modules`, and instanciate
@@ -15,7 +15,7 @@ const modules = import.meta.glob('./*-example.ts');
 async function loadExamples(renderer: WebGLRenderer): Promise<Example[]> {
   const promises = [];
   for (const path in modules) {
-    const name = path.split('/').pop()?.replace('.ts', '');
+    const name = "project";
     const p = modules[path]().then((mod: any) => {
       const example = new mod.default(renderer);
       example['_name'] = name;
@@ -26,13 +26,6 @@ async function loadExamples(renderer: WebGLRenderer): Promise<Example[]> {
   return Promise.all(promises);
 }
 
-/**
- * Switch from example `previous` to `next`. This function will call
- * the lifecycle methods `destroy()` and `initialize()`
- *
- * @param next - Next example to run
- * @param previous - Previous example to destroy, if any
- */
 function switchExample(next: Example, previous?: Example | null): void {
   next.initialize();
   next.resize(canvas.width, canvas.height);
@@ -42,22 +35,13 @@ function switchExample(next: Example, previous?: Example | null): void {
 
   const title = document.getElementById('title');
   if (title) {
-    // Not optimized to look it up each time, but I am lazy :)
     title.innerText = next.name;
   }
 }
 
-/**
- * Renderer Initialization.
- */
-
 const canvas = document.getElementById('main-canvas') as HTMLCanvasElement;
 const renderer = new WebGLRenderer({ canvas, antialias: true });
 renderer.setClearColor(new Color('#464646'));
-
-/**
- * Examples Initialization.
- */
 
 const examples = await loadExamples(renderer);
 const params = new URLSearchParams(window.location.search);
@@ -65,12 +49,7 @@ const exampleId = params.get('tp') ?? params.get('example') ?? 'texture-example'
 let exampleIndex = examples.findIndex((e) => e.name === exampleId);
 exampleIndex = exampleIndex === -1 ? 0 : exampleIndex;
 
-/**
- * UI Initialization.
- */
-
-// const previousButton = document.getElementById('previous');
-// const nextButton = document.getElementById('next');
+// const navigateButton = document.getElementById('next');
 // if (previousButton) {
 //   previousButton.addEventListener('click', () => {
 //     const previous = examples[exampleIndex];
@@ -80,25 +59,17 @@ exampleIndex = exampleIndex === -1 ? 0 : exampleIndex;
 //     switchExample(example, previous);
 //   });
 // }
-// if (nextButton) {
-//   nextButton.addEventListener('click', () => {
+// if (navigateButton) {
+//   navigateButton.addEventListener('click', () => {
 //     const previous = examples[exampleIndex];
 //     exampleIndex = (exampleIndex + 1) % examples.length;
 //     switchExample(examples[exampleIndex], previous);
 //   });
 // }
 
-/**
- * Lifecycle: Initialization.
- */
-
 const clock = new Clock();
 
 switchExample(examples[exampleIndex]);
-
-/**
- * Lifecycle: Update & Render.
- */
 
 function animate() {
   const example = examples[exampleIndex];
@@ -109,10 +80,6 @@ function animate() {
   window.requestAnimationFrame(animate);
 }
 animate();
-
-/**
- * Lifecycle: Resize.
- */
 
 const resizeObserver = new ResizeObserver(entries => {
   const example = examples[exampleIndex];
