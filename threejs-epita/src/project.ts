@@ -6,11 +6,14 @@ import {
 	BackSide,
 	BoxGeometry,
 	Color,
-	DirectionalLight,
+	DoubleSide,
+	Group,
 	Mesh,
 	MeshBasicMaterial,
 	Raycaster,
 	ShaderMaterial,
+	Shape,
+	ShapeGeometry,
 	Vector2,
 	Vector3,
 	WebGLRenderer,
@@ -18,15 +21,18 @@ import {
 
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader'
 import { Example } from './example'
+import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
-import gsap from 'gsap'
+import { SVGLoader } from 'three/examples/jsm/loaders/SVGLoader'
+import { gsap } from 'gsap'
 
 let mouse = new Vector2()
 export default class GLTFExample extends Example {
 	controls = new OrbitControls(this._cam, this._renderer.domElement)
 	private _raycaster: Raycaster
 	private bookSelected: Mesh | null = null
+	private resume: Group | null = null
 	private bookSelectedInitialPosition: Vector3 = new Vector3()
 	// mixer = new AnimationMixer();
 
@@ -74,6 +80,7 @@ export default class GLTFExample extends Example {
 							y: newY,
 							z: newZ,
 						})
+						this.addText(new Vector3(newX, newY, newZ + 3))
 					}
 				} else {
 					this._raycaster.setFromCamera(mouse, this._cam)
@@ -88,6 +95,7 @@ export default class GLTFExample extends Example {
 								y: this.bookSelectedInitialPosition.y,
 								z: this.bookSelectedInitialPosition.z,
 							})
+							this._scene.remove(this.resume!)
 							this.bookSelected = null
 						}
 					}
@@ -158,6 +166,66 @@ export default class GLTFExample extends Example {
 
 	public render(): void {
 		super.render()
+	}
+
+	private addText(textPosition: Vector3) {
+		const loader: FontLoader = new FontLoader()
+		loader.load('assets/fonts/helvetiker.json', (font) => {
+			const color = new Color(0xbc4444)
+
+			const matDark = new MeshBasicMaterial({
+				color: color,
+				side: DoubleSide,
+			})
+
+			const message = 'Titre'
+
+			const shapes = font.generateShapes(message, 100)
+			const geometry = new ShapeGeometry(shapes)
+			geometry.computeBoundingBox()
+			const xMid = -0.5 * (geometry.boundingBox!.max.x - geometry.boundingBox!.min.x)
+			geometry.translate(xMid, 0, 0)
+			const holeShapes: Shape[] = []
+
+			for (let i = 0; i < shapes.length; i++) {
+				const shape = shapes[i]
+
+				if (shape.holes && shape.holes.length > 0) {
+					for (let j = 0; j < shape.holes.length; j++) {
+						const hole = shape.holes[j]
+						holeShapes.push(hole as Shape)
+					}
+				}
+			}
+
+			shapes.push.apply(shapes, holeShapes)
+			const style = SVGLoader.getStrokeStyle(5, color.getStyle())
+			const strokeText = new Group()
+
+			for (let i = 0; i < shapes.length; i++) {
+				const shape = shapes[i]
+				const points = shape.getPoints()
+				const geometry = SVGLoader.pointsToStroke(
+					points.map((point) => {
+						return new Vector3(point.x, point.y, 0)
+					}),
+					style
+				)
+				geometry.translate(xMid, 0, 0)
+				const strokeMesh = new Mesh(geometry, matDark)
+				strokeText.add(strokeMesh)
+			}
+
+			strokeText.scale.multiplyScalar(0.05)
+			strokeText.position.set(textPosition.x, textPosition.y, textPosition.z)
+			strokeText.rotation.set(
+				this.bookSelected!.rotation.x,
+				this.bookSelected!.rotation.y,
+				this.bookSelected!.rotation.z
+			)
+			this.resume = strokeText
+			this._scene.add(strokeText)
+		})
 	}
 
 	private gltfLoader() {
