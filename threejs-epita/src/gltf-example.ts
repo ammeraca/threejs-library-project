@@ -6,13 +6,11 @@ import {
 	BoxGeometry,
 	Color,
 	DirectionalLight,
-	FrontSide,
 	Mesh,
 	MeshBasicMaterial,
 	Raycaster,
 	ShaderMaterial,
 	Vector2,
-	Vector3,
 	WebGLRenderer,
 } from 'three'
 

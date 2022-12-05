@@ -69,8 +69,7 @@ exampleIndex = exampleIndex === -1 ? 0 : exampleIndex;
  * UI Initialization.
  */
 
-// const previousButton = document.getElementById('previous');
-// const nextButton = document.getElementById('next');
+const navigateButton = document.getElementById('next');
 // if (previousButton) {
 //   previousButton.addEventListener('click', () => {
 //     const previous = examples[exampleIndex];
@@ -80,13 +79,13 @@ exampleIndex = exampleIndex === -1 ? 0 : exampleIndex;
 //     switchExample(example, previous);
 //   });
 // }
-// if (nextButton) {
-//   nextButton.addEventListener('click', () => {
-//     const previous = examples[exampleIndex];
-//     exampleIndex = (exampleIndex + 1) % examples.length;
-//     switchExample(examples[exampleIndex], previous);
-//   });
-// }
+if (navigateButton) {
+  navigateButton.addEventListener('click', () => {
+    const previous = examples[exampleIndex];
+    exampleIndex = (exampleIndex + 1) % examples.length;
+    switchExample(examples[exampleIndex], previous);
+  });
+}
 
 /**
  * Lifecycle: Initialization.
