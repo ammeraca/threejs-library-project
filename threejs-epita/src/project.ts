@@ -1,5 +1,6 @@
 import {
 	AdditiveBlending,
+	AmbientLight,
 	AnimationMixer,
 	AxesHelper,
 	BackSide,
@@ -57,10 +58,10 @@ export default class GLTFExample extends Example {
 
 		this.setControls()
 
-		const dir = new DirectionalLight(0xffffff, 5)
-		dir.position.set(-20, 40, 40)
-		dir.shadow.mapSize.set(8192, 8192)
-		dir.castShadow = true
+		const dir = new AmbientLight(0xffffff, 3)
+		// dir.position.set(-20, 40, 40)
+		// dir.shadow.mapSize.set(8192, 8192)
+		// dir.castShadow = true
 		this._scene.add(dir)
 
 		this._scene.add(new AxesHelper(100))

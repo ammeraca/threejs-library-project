@@ -2,6 +2,7 @@ import {
 	AmbientLight,
 	AnimationMixer,
 	Color,
+	Object3D,
 	Vector2,
 	WebGLRenderer,
 } from 'three'
@@ -12,7 +13,9 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import { Example } from './example'
 
 let mouse = new Vector2()
-export default class GLTFExample extends Example {
+export default class HomeScreen extends Example {
+	_pivot: Object3D;
+
 	constructor(renderer: WebGLRenderer) {
 		super(renderer)
 
@@ -20,6 +23,9 @@ export default class GLTFExample extends Example {
 
 		const ambient = new AmbientLight(0xffffff, 0.5);
 		this._scene.add(ambient);
+
+		this._pivot = new Object3D();
+		this._scene.add(this._pivot);
 
 		new OrbitControls(this._cam, renderer.domElement);
 	}
@@ -40,7 +46,7 @@ export default class GLTFExample extends Example {
 	}
 
 	public update(delta: number): void {
-		
+		this._pivot.rotateY(0.001);
 	}
 
 	public render(): void {
@@ -53,7 +59,7 @@ export default class GLTFExample extends Example {
 
 		const loader = new GLTFLoader()
 		loader.setDRACOLoader(dracoLoader)
-		const book_path = 'assets/models/viking_book/scene.gltf'
+		const book_path = 'assets/models/magic_book/scene.gltf'
 		loader.load(
 			book_path,
 			(gltf) => {
@@ -61,8 +67,11 @@ export default class GLTFExample extends Example {
 				gltf.animations.forEach((clip) => {
 					mixer.clipAction(clip).play()
 				})
-				gltf.scene.scale.set(0.5, 0.5, 0.5)
-				this._scene.add(gltf.scene)
+				gltf.scene.scale.set(100, 100, 100)
+				gltf.scene.position.y -= 20
+				gltf.scene.rotateY(-Math.PI / 8);
+				gltf.scene.rotateX(Math.PI / 8);
+				this._pivot.add(gltf.scene)
 			},
 			undefined,
 			function (e) {

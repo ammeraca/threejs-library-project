@@ -44,7 +44,7 @@ a:hover .wave {
 a span {
   position: relative;
   z-index: 1;
-  color: rgb(0, 0, 0);
+  color: rgb(255, 255, 255);
   font-size: 15px;
   letter-spacing: 8px;
   text-align: center;
@@ -52,7 +52,7 @@ a span {
 a .wave {
   width: 200px;
   height: 200px;
-  background-color: #123a44;
+  background-color: #101718;
   box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.5);
   position: absolute;
   left: 0;
@@ -70,7 +70,7 @@ a .wave::before, a .wave::after {
 }
 a .wave::before {
   border-radius: 45%;
-  background-color: #475f48;
+  background-color: #9b9735;
   animation: wave 5s linear infinite;
 }
 a .wave::after {
