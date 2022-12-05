@@ -12,6 +12,7 @@ import {
 	Raycaster,
 	ShaderMaterial,
 	Vector2,
+	Vector3,
 	WebGLRenderer,
 } from 'three'
 
