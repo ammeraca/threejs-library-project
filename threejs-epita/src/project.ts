@@ -54,13 +54,14 @@ export default class GLTFExample extends Example {
 	})
 
 	public books = {
-		book: new Mesh(this.bookGeometry.clone(), new MeshBasicMaterial({ color: new Color(0x448f44) })),
+		book: new Mesh(this.bookGeometry.clone(), new MeshBasicMaterial({ color: new Color(0x601308) })),
 		bookGlow: new Mesh(this.bookGeometry.clone(), this.customMaterial.clone()),
 	}
 
 	constructor(renderer: WebGLRenderer) {
 		super(renderer)
 		this._target = new Vector3(0, 60, 0);
+		this.books.book.castShadow = true;
 
 		this._raycaster = new Raycaster()
 		this.setControls()
@@ -80,8 +81,9 @@ export default class GLTFExample extends Example {
 
 		this._scene.add(new AxesHelper(200))
 
-		this.books.book.position.set(20, 47, 20)
+		this.books.book.position.set(25, 47, 14)
 		this.books.book.name = 'book'
+		this.books.book.rotateY(- Math.PI / 5)
 		this._scene.add(this.books.book)
 
 		this.books.bookGlow.position.set(this.books.book.position.x, this.books.book.position.y, this.books.book.position.z)
@@ -110,9 +112,9 @@ export default class GLTFExample extends Example {
 			(gltf) => {
 				library = gltf.scene;
 				library.name = "library";
-				library.scale.set(200, 200, 200)
-				library.position.y += 300;
-				library.position.z += 500;
+				library.scale.set(50, 50, 50)
+				library.position.y += 75;
+				library.position.z += 125;
 				this._scene.add(library)
 			}
 		)
@@ -128,22 +130,22 @@ export default class GLTFExample extends Example {
 			}
 		)
 
-		// var books = [];
-		// var animated_book;
-		// loader.load(
-		// 	'assets/models/books/animated_book/scene.gltf',
-		// 	(gltf) => {
-		// 		animated_book = gltf.scene;
-		// 		animated_book.name = "book";
-		// 		animated_book.scale.set(0.01, 0.01, 0.01)
-		// 		animated_book.position.x = 27;
-		// 		animated_book.position.y = 45;
-		// 		animated_book.position.z = -22;
-		// 		animated_book.rotateZ(Math.PI / 2)
-		// 		animated_book.rotateX(3 * Math.PI / 4)
-		// 		this._scene.add(animated_book)
-		// 	}
-		// )
+		var books = [];
+		var animated_book;
+		loader.load(
+			'assets/models/books/animated_book/scene.gltf',
+			(gltf) => {
+				animated_book = gltf.scene;
+				animated_book.name = "book";
+				animated_book.scale.set(0.01, 0.01, 0.01)
+				animated_book.position.x = 27;
+				animated_book.position.y = 45;
+				animated_book.position.z = -22;
+				animated_book.rotateZ(Math.PI / 2)
+				animated_book.rotateX(3 * Math.PI / 4)
+				this._scene.add(animated_book)
+			}
+		)
 
 	}
 
@@ -281,8 +283,8 @@ export default class GLTFExample extends Example {
 								z: newZ,
 							})
 							this.addText(new Vector3(newX, newY, newZ + 3))
-							// this.controls.enabled = false;
-							this.controls.target.set(this.books.book.position.x, this.books.book.position.y, this.books.book.position.z)
+							this.controls.enabled = false;
+							// this.controls.target.set(this.books.book.position.x, this.books.book.position.y, this.books.book.position.z)
 						}
 				}
 				} 
@@ -301,8 +303,8 @@ export default class GLTFExample extends Example {
 							})
 							this._scene.remove(this._resume!)
 							this._bookSelected = null
-							//this.controls.enabled = true;
-							this.controls.target.set(0, 60, 0)
+							this.controls.enabled = true;
+							// this.controls.target.set(0, 60, 0)
 						}
 					}
 				}
