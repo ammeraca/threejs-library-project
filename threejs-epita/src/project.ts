@@ -10,6 +10,7 @@ import {
 	Group,
 	Mesh,
 	MeshBasicMaterial,
+	Object3D,
 	Raycaster,
 	ShaderMaterial,
 	Shape,
@@ -34,7 +35,6 @@ export default class GLTFExample extends Example {
 	private bookSelected: Mesh | null = null
 	private resume: Group | null = null
 	private bookSelectedInitialPosition: Vector3 = new Vector3()
-	// mixer = new AnimationMixer();
 
 	bookGeom = new BoxGeometry(200 / 15, 300 / 15, 50 / 15)
 	customMaterial = new ShaderMaterial({
@@ -58,8 +58,8 @@ export default class GLTFExample extends Example {
 
 	constructor(renderer: WebGLRenderer) {
 		super(renderer)
-
 		this._raycaster = new Raycaster()
+
 		document.addEventListener('mousemove', this.onMouseMove, false)
 		document.addEventListener(
 			'click',
@@ -69,18 +69,20 @@ export default class GLTFExample extends Example {
 					const intersects = this._raycaster.intersectObjects(this._scene.children, false)
 					if (intersects.length > 0) {
 						const object = intersects[0].object as Mesh
-						this.bookSelected = object
-						this.bookSelectedInitialPosition = object.position.clone()
-						const newX = (this._cam.position.x + object.position.x) / 2
-						const newY = (this._cam.position.y + object.position.y) / 2
-						const newZ = (this._cam.position.z + object.position.z) / 2
-						gsap.to(object.position, {
-							duration: 1,
-							x: newX,
-							y: newY,
-							z: newZ,
-						})
-						this.addText(new Vector3(newX, newY, newZ + 3))
+						if (object.name.includes('book')) {
+							this.bookSelected = object
+							this.bookSelectedInitialPosition = object.position.clone()
+							const newX = (this._cam.position.x + object.position.x) / 2
+							const newY = (this._cam.position.y + object.position.y) / 2
+							const newZ = (this._cam.position.z + object.position.z) / 2
+							gsap.to(object.position, {
+								duration: 1,
+								x: newX,
+								y: newY,
+								z: newZ,
+							})
+							this.addText(new Vector3(newX, newY, newZ + 3))
+						}
 					}
 				} else {
 					this._raycaster.setFromCamera(mouse, this._cam)
@@ -111,9 +113,6 @@ export default class GLTFExample extends Example {
 		this.setControls()
 
 		const dir = new AmbientLight(0xffffff, 3)
-		// dir.position.set(-20, 40, 40)
-		// dir.shadow.mapSize.set(8192, 8192)
-		// dir.castShadow = true
 		this._scene.add(dir)
 
 		this._scene.add(new AxesHelper(100))
@@ -255,9 +254,9 @@ export default class GLTFExample extends Example {
 	private rotateOnScroll() {
 		window.addEventListener('wheel', (event: WheelEvent) => {
 			if (event.deltaY > 0) {
-				this._scene.rotateY(-0.02)
+				this._cam.position.applyAxisAngle(new Vector3(0, 1, 0), 0.02)
 			} else {
-				this._scene.rotateY(0.02)
+				this._cam.position.applyAxisAngle(new Vector3(0, 1, 0), -0.02)
 			}
 		})
 	}
