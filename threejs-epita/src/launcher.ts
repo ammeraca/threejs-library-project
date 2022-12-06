@@ -59,7 +59,7 @@ export default class HomeScreen extends Example {
 
 		const loader = new GLTFLoader()
 		loader.setDRACOLoader(dracoLoader)
-		const book_path = 'assets/models/magic_book/scene.gltf'
+		const book_path = 'assets/models/books/magic_book/scene.gltf'
 		loader.load(
 			book_path,
 			(gltf) => {
