@@ -30,15 +30,14 @@ import { gsap } from 'gsap'
 
 let mouse = new Vector2()
 export default class GLTFExample extends Example {
-	controls = new OrbitControls(this._cam, this._renderer.domElement);
-	private _raycaster: Raycaster;
-	private _bookSelected: Mesh | null = null;
-	private _resume: Group | null = null;
-	private _bookSelectedInitialPosition: Vector3 = new Vector3();
 
-	private _target: Vector3;
+	controls = new OrbitControls(this._cam, this._renderer.domElement)
+	private _raycaster: Raycaster
+	private bookSelected: Mesh | null = null
+	private resume: Group | null = null
+	private bookSelectedInitialPosition: Vector3 = new Vector3()
 
-	bookGeometry = new BoxGeometry(200 / 15, 300 / 15, 50 / 15)
+	bookGeom = new BoxGeometry(200 / 15, 300 / 15, 50 / 15)
 	customMaterial = new ShaderMaterial({
 		uniforms: {
 			c: { value: 1.5 },
@@ -60,23 +59,58 @@ export default class GLTFExample extends Example {
 
 	constructor(renderer: WebGLRenderer) {
 		super(renderer)
-		this._target = new Vector3(0, 60, 0);
-		this.books.book.castShadow = true;
+		// this._target = new Vector3(0, 60, 0);
+		// this.books.book.castShadow = true;
 
+		// this._raycaster = new Raycaster()
+		// this.setControls()
+		// document.addEventListener('mousemove', this.onMouseMove, false)
+		// this.moveBook()
 		this._raycaster = new Raycaster()
-		this.setControls()
+
 		document.addEventListener('mousemove', this.onMouseMove, false)
-		this.moveBook()
+		document.addEventListener(
+			'click',
+			() => {
+				if (this.bookSelected == null) {
+					this._raycaster.setFromCamera(mouse, this._cam)
+					const intersects = this._raycaster.intersectObjects(this._scene.children, false)
+					if (intersects.length > 0) {
+						const object = intersects[0].object as Mesh
+						if (object.name.includes('book')) {
+							this.bookSelected = object
+							this.bookSelectedInitialPosition = object.position.clone()
+							const newX = (this._cam.position.x + object.position.x) / 2
+							const newY = (this._cam.position.y + object.position.y) / 2
+							const newZ = (this._cam.position.z + object.position.z) / 2
+							gsap.to(object.position, {
+								duration: 1,
+								x: newX,
+								y: newY,
+								z: newZ,
+							})
+							this.addText(new Vector3(newX, newY, newZ + 3))
+						}
+					}
+				} else {
+					this._raycaster.setFromCamera(mouse, this._cam)
+					const intersects = this._raycaster.intersectObjects(this._scene.children, false)
+					if (intersects.length > 0) {
+						const object = intersects[0].object as Mesh
 
 		this.initializeBooks();
 	}
 
 	public initialize() {
 		super.initialize()
-		const dir = new AmbientLight(0xffffff, 4)
+		// const dir = new AmbientLight(0xffffff, 4)
 		// dir.position.set(-20, 40, 40)
 		// dir.shadow.mapSize.set(8192, 8192)
-		dir.castShadow = true
+		// dir.castShadow = true
+
+		this.setControls()
+
+		const dir = new AmbientLight(0xffffff, 3)
 		this._scene.add(dir)
 
 		this._scene.add(new AxesHelper(200))
@@ -243,9 +277,9 @@ export default class GLTFExample extends Example {
 	private rotateOnScroll() {
 		window.addEventListener('wheel', (event: WheelEvent) => {
 			if (event.deltaY > 0) {
-				this._scene.rotateY(-0.02)
+				this._cam.position.applyAxisAngle(new Vector3(0, 1, 0), 0.02)
 			} else {
-				this._scene.rotateY(0.02)
+				this._cam.position.applyAxisAngle(new Vector3(0, 1, 0), -0.02)
 			}
 		})
 	}
