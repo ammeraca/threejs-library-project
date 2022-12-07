@@ -2,7 +2,11 @@ import {
 	AmbientLight,
 	AnimationMixer,
 	Color,
+	Group,
+	Mesh,
 	Object3D,
+	SphereGeometry,
+	Spherical,
 	WebGLRenderer,
 } from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
@@ -11,8 +15,19 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 
 import { Example } from './example'
 
+function rand(dist: number, out: Object3D): Object3D {
+  const n = Math.random();
+  const n2 = Math.random();
+
+  const s = new Spherical(dist, n * 2.0 * Math.PI, n2 * 2.0 * Math.PI);
+
+  out.position.setFromSpherical(s).multiplyScalar(dist);
+  return out;
+}
+
 export default class HomeScreen extends Example {
 	_pivot: Object3D;
+	private _starGroup: Group;
 
 	constructor(renderer: WebGLRenderer) {
 		super(renderer)
@@ -26,6 +41,16 @@ export default class HomeScreen extends Example {
 		this._scene.add(this._pivot);
 
 		new OrbitControls(this._cam, renderer.domElement);
+    const sphere = new SphereGeometry(5);
+    this._starGroup = new Group();
+    for (let i = 0; i < 2000; ++i) {
+      const s = new Mesh(sphere);
+      rand(20, s);
+      s.scale.set(0.25, 0.25, 0.25);
+      this._starGroup.add(s);
+    }
+
+    this._scene.add(this._starGroup);
 	}
 
 	public initialize() {
@@ -45,6 +70,14 @@ export default class HomeScreen extends Example {
 
 	public update(delta: number): void {
 		this._pivot.rotateY(0.001);
+
+		// this.lightGroup.traverse((child) => {
+    //   const light = (child as PointLight);
+    //   if (light) {
+    //     light.intensity = Math.random();
+		// 		light.position.set(Math.random(), Math.random(), Math.random())
+    //   }
+    // });
 	}
 
 	public render(): void {

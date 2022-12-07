@@ -56,7 +56,10 @@ export default class GLTFExample extends Example {
 	glowMesh = new Mesh(this.bookGeom.clone(), this.customGlowShader.clone())
 
 	public bookInfos = {
-		petitPrince: { title: 'Le petit prince', resume: 'Ceci est le résumé du petit prince, le livre est chouette' },
+		petitPrince: { title: 'Le petit prince', resume: 
+		"Le Petit Prince est une œuvre de langue française, la plus connue d'Antoine de Saint-Exupéry.\n\n"
+		+ "Le premier soir je me suis donc endormi sur le sable à mille milles de toute terre habitée. J'étais bien plus isolé qu'un naufragé sur un radeau au milieu de l'océan. Alors vous imaginez ma surprise, au lever du jour, quand une drôle de petite voix m'a réveillé. Elle disait:"
+		+ "- S'il vous plaît... dessine-moi un mouton !" },
 		mobyDick: { title: 'Moby Dick', resume: "Sur un bateau dans l'eau, une baleine fait des siennes" },
 	}
 
@@ -67,7 +70,7 @@ export default class GLTFExample extends Example {
 			glowMesh: this.glowMesh.clone(),
 			bookInfo: this.bookInfos.petitPrince,
 			initCoordinates: new Vector3(25, 47, 14),
-			initRotation: Math.PI / 5,
+			initRotation: - Math.PI / 5,
 		},
 		{
 			name: 'book-MobyDick',
@@ -279,8 +282,8 @@ export default class GLTFExample extends Example {
 		tempV.project(this._cam)
 
 		// convert the normalized position to CSS coordinates
-		const resumeX = (tempV.x - 0.75 * 0.5 + 0.5) * window.innerWidth
-		const resumeY = (tempV.y - 0.6 * -0.5 + 0.5) * window.innerHeight
+		const resumeX = (tempV.x * 0.5 + 0.5) * window.innerWidth
+		const resumeY = (tempV.y * -0.5 + 0.1) * window.innerHeight
 
 		// move the elem to that position
 		const labelContainerElem = document.querySelector('#labels')
@@ -293,7 +296,7 @@ export default class GLTFExample extends Example {
 		title.textContent = bookInfo.title
 		labelContainerElem?.appendChild(title)
 		const titleX = (tempV.x * 0.5 + 0.5) * window.innerWidth
-		const titleY = (tempV.y * -0.5 + 0.5) * window.innerHeight
+		const titleY = (tempV.y * -0.5 - 0.1) * window.innerHeight
 		title.style.transform = `translate(-50%, -50%) translate(${titleX}px,${titleY}px)`
 	}
 
