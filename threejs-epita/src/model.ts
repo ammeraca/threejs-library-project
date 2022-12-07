@@ -1,6 +1,6 @@
 import { PerspectiveCamera, Scene, WebGLRenderer } from 'three'
 
-export class Example {
+export class Project {
 	protected _renderer: WebGLRenderer
 
 	protected _scene: Scene

@@ -13,7 +13,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 
-import { Example } from './example'
+import { Project } from './model'
 
 function rand(dist: number, out: Object3D): Object3D {
   const n = Math.random();
@@ -25,7 +25,7 @@ function rand(dist: number, out: Object3D): Object3D {
   return out;
 }
 
-export default class HomeScreen extends Example {
+export default class HomeScreen extends Project {
 	_pivot: Object3D;
 	private _starGroup: Group;
 

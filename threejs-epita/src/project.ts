@@ -1,7 +1,5 @@
 import {
 	AdditiveBlending,
-	AmbientLight,
-	AxesHelper,
 	BackSide,
 	BoxGeometry,
 	Color,
@@ -9,9 +7,7 @@ import {
 	DirectionalLight,
 	LoadingManager,
 	Mesh,
-	MeshBasicMaterial,
 	MeshPhysicalMaterial,
-	MeshToonMaterial,
 	Object3D,
 	Raycaster,
 	ShaderMaterial,
@@ -21,7 +17,7 @@ import {
 } from 'three'
 
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader'
-import { Example } from './example'
+import { Project } from './model'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import { gsap } from 'gsap'
@@ -38,7 +34,7 @@ export type Book = {
 	bookInfo: BookInfo
 }
 
-export default class GLTFExample extends Example {
+export default class LibraryProject extends Project {
 	controls = new OrbitControls(this._cam, this._renderer.domElement)
 	private _raycaster: Raycaster
 	private bookSelected: Book | null = null
@@ -156,7 +152,7 @@ export default class GLTFExample extends Example {
 			),
 			glowMesh: this.glowMesh.clone(),
 			bookInfo: this.bookInfos.narnia,
-			initCoordinates: new Vector3(-5, 45, -25),
+			initCoordinates: new Vector3(-10, 45, -20),
 			initRotation: -Math.PI / 5,
 		},
 		{
@@ -228,7 +224,6 @@ export default class GLTFExample extends Example {
 					x: this.bookSelected?.initCoordinates.x,
 					y: this.bookSelected?.initCoordinates.y,
 					z: this.bookSelected?.initCoordinates.z,
-					// rotateY: this.bookSelected?.initRotation,
 				})
 				this.removeText()
 				this.removeStory()
@@ -239,7 +234,6 @@ export default class GLTFExample extends Example {
 					x: this.bookSelected?.initCoordinates.x,
 					y: this.bookSelected?.initCoordinates.y,
 					z: this.bookSelected?.initCoordinates.z,
-					// rotateY: this.bookSelected?.initRotation,
 				})
 				this.removeText()
 				this.removeStory()

@@ -1,10 +1,10 @@
 import { Clock, Color, WebGLRenderer } from 'three';
-import { Example } from './example';
+import { Project } from './model';
 
 // @ts-ignore
 const modules = import.meta.glob('./project.ts');
 
-async function loadExamples(renderer: WebGLRenderer): Promise<Example[]> {
+async function loadExamples(renderer: WebGLRenderer): Promise<Project[]> {
   const promises = [];
   for (const path in modules) {
     const name = "project";
@@ -18,7 +18,7 @@ async function loadExamples(renderer: WebGLRenderer): Promise<Example[]> {
   return Promise.all(promises);
 }
 
-function switchExample(next: Example, previous?: Example | null): void {
+function switchExample(next: Project, previous?: Project | null): void {
   next.initialize();
   next.resize(canvas.width, canvas.height);
   if (previous) {
