@@ -80,7 +80,7 @@ export default class LibraryProject extends Project {
 			object: new Object3D(),
 		},
 		narnia: {
-			title: 'Narnia',
+			title: 'Le monde de Narnia',
 			resume:
 				"Le Monde de Narnia, en anglais The Chronicles of Narnia, est une œuvre littéraire en sept tomes de l'écrivain britannique C. S. Lewis. Elle est considérée comme un classique de la littérature anglo-saxonne pour enfants et est l'œuvre la plus connue de l'auteur. Le Monde de Narnia relate les aventures d'enfants qui jouent un rôle central dans l'histoire du royaume fictif de Narnia, un endroit où les animaux parlent, la magie est courante, et le bien combat le mal. ",
 			object: new Object3D(),
