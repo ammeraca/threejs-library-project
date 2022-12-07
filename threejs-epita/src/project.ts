@@ -121,18 +121,18 @@ export default class GLTFExample extends Example {
 			glowMesh: this.glowMesh.clone(),
 			bookInfo: this.bookInfos.harryPotter,
 			initCoordinates: new Vector3(25, 74, -14),
-			initRotation: Math.PI / 5,
+			initRotation: 2*Math.PI / 5,
 		},
 		{
 			name: 'book-Dracula',
 			mesh: new Mesh(
 				this.bookGeom.clone(),
-				new MeshPhysicalMaterial({ roughness: 0.7, color: 0x991111, bumpScale: 0.002, metalness: 0.2 })
+				new MeshPhysicalMaterial({ roughness: 0.7, color: 0x991111, bumpScale: 0.002, metalness: 0.2})
 			),
 			glowMesh: this.glowMesh.clone(),
 			bookInfo: this.bookInfos.dracula,
 			initCoordinates: new Vector3(-25, 102, -14),
-			initRotation: Math.PI / 5,
+			initRotation: - Math.PI / 5,
 		},
 	]
 
@@ -288,18 +288,18 @@ export default class GLTFExample extends Example {
 			this._scene.add(gltf.scene)
 		})
 
-		var animated_book
-		loader.load('assets/models/books/animated_book/scene.gltf', (gltf) => {
-			animated_book = gltf.scene
-			animated_book.name = 'book2'
-			animated_book.scale.set(0.01, 0.01, 0.01)
-			animated_book.position.x = 27
-			animated_book.position.y = 45
-			animated_book.position.z = -22
-			animated_book.rotateZ(Math.PI / 2)
-			animated_book.rotateX((3 * Math.PI) / 4)
-			this._scene.add(animated_book)
-		})
+		// var animated_book
+		// loader.load('assets/models/books/animated_book/scene.gltf', (gltf) => {
+		// 	animated_book = gltf.scene
+		// 	animated_book.name = 'book2'
+		// 	animated_book.scale.set(0.01, 0.01, 0.01)
+		// 	animated_book.position.x = 27
+		// 	animated_book.position.y = 45
+		// 	animated_book.position.z = -22
+		// 	animated_book.rotateZ(Math.PI / 2)
+		// 	animated_book.rotateX((3 * Math.PI) / 4)
+		// 	this._scene.add(animated_book)
+		// })
 
 		loader.load('assets/models/le_petit_prince/scene.gltf', (gltf) => {
 			this.bookInfos.petitPrince.object = gltf.scene
