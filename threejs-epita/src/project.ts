@@ -3,10 +3,9 @@ import {
 	AmbientLight,
 	AxesHelper,
 	BackSide,
-	Box3,
 	BoxGeometry,
 	Color,
-	Group,
+	LoadingManager,
 	Mesh,
 	MeshBasicMaterial,
 	Object3D,
@@ -26,16 +25,22 @@ import { gsap } from 'gsap'
 let mouse = new Vector2()
 
 export type BookInfo = { title: string; resume: string }
+export type Book = {
+	name: string
+	mesh: Mesh
+	glowMesh: Mesh
+	initCoordinates: Vector3
+	initRotation: number
+	bookInfo: BookInfo
+}
 
 export default class GLTFExample extends Example {
 	controls = new OrbitControls(this._cam, this._renderer.domElement)
 	private _raycaster: Raycaster
-	private bookSelected: Mesh | null = null
-	private resume: Group | null = null
-	private bookSelectedInitialPosition: Vector3 = new Vector3()
+	private bookSelected: Book | null = null
 
 	bookGeom = new BoxGeometry(200 / 15, 300 / 15, 50 / 15)
-	customMaterial = new ShaderMaterial({
+	customGlowShader = new ShaderMaterial({
 		uniforms: {
 			c: { value: 1.5 },
 			p: { value: 5 },
@@ -48,18 +53,31 @@ export default class GLTFExample extends Example {
 		blending: AdditiveBlending,
 		transparent: true,
 	})
-
-	public books = {
-		bookPetitPrince: new Mesh(this.bookGeom.clone(), new MeshBasicMaterial({ color: new Color(0x601308) })),
-		bookGlowPetitPrince: new Mesh(this.bookGeom.clone(), this.customMaterial.clone()),
-		bookMobyDick: new Mesh(this.bookGeom.clone(), new MeshBasicMaterial({ color: new Color(0x1586a5) })),
-		bookGlowMobyDick: new Mesh(this.bookGeom.clone(), this.customMaterial.clone()),
-	}
+	glowMesh = new Mesh(this.bookGeom.clone(), this.customGlowShader.clone())
 
 	public bookInfos = {
 		petitPrince: { title: 'Le petit prince', resume: 'Ceci est le résumé du petit prince, le livre est chouette' },
 		mobyDick: { title: 'Moby Dick', resume: "Sur un bateau dans l'eau, une baleine fait des siennes" },
 	}
+
+	public books: Book[] = [
+		{
+			name: 'book-PetitPrince',
+			mesh: new Mesh(this.bookGeom.clone(), new MeshBasicMaterial({ color: new Color(0x601308) })),
+			glowMesh: this.glowMesh.clone(),
+			bookInfo: this.bookInfos.petitPrince,
+			initCoordinates: new Vector3(25, 47, 14),
+			initRotation: Math.PI / 5,
+		},
+		{
+			name: 'book-MobyDick',
+			mesh: new Mesh(this.bookGeom.clone(), new MeshBasicMaterial({ color: new Color(0x1586a5) })),
+			glowMesh: this.glowMesh.clone(),
+			bookInfo: this.bookInfos.mobyDick,
+			initCoordinates: new Vector3(-25, 47, 14),
+			initRotation: Math.PI / 5,
+		},
+	]
 
 	constructor(renderer: WebGLRenderer) {
 		super(renderer)
@@ -70,55 +88,82 @@ export default class GLTFExample extends Example {
 			'click',
 			() => {
 				if (this.bookSelected == null) {
-					this._raycaster.setFromCamera(mouse, this._cam)
-					const intersects = this._raycaster.intersectObjects(this._scene.children, false)
-					if (intersects.length > 0) {
-						const object = intersects[0].object as Mesh
-						if (object.name.includes('book')) {
-							this.bookSelected = object
-							this.bookSelectedInitialPosition = object.position.clone()
-							const newX = (this._cam.position.x + object.position.x) / 2
-							const newY = (this._cam.position.y + object.position.y) / 2
-							const newZ = (this._cam.position.z + object.position.z) / 2
-							gsap.to(object.position, {
-								duration: 1,
-								x: newX,
-								y: newY,
-								z: newZ,
-							})
-							switch (object.name) {
-								case 'bookPetitPrince':
-									this.addText(this.bookInfos.petitPrince)
-									break
-								case 'bookMobyDick':
-									this.addText(this.bookInfos.mobyDick)
-									break
-							}
-						}
-					}
+					this.clickEvent()
 				} else {
-					this._raycaster.setFromCamera(mouse, this._cam)
-					const intersects = this._raycaster.intersectObjects(this._scene.children, false)
-					if (intersects.length > 0) {
-						const object = intersects[0].object as Mesh
-
-						if (object == this.bookSelected) {
-							gsap.to(this.bookSelected.position, {
-								duration: 1,
-								x: this.bookSelectedInitialPosition.x,
-								y: this.bookSelectedInitialPosition.y,
-								z: this.bookSelectedInitialPosition.z,
-							})
-							this.removeText()
-							this.bookSelected = null
-						}
-					}
+					this.resetEvent()
 				}
 			},
 			true
 		)
 
 		this.initializeBooks()
+	}
+
+	public clickEvent() {
+		this._raycaster.setFromCamera(mouse, this._cam)
+		const intersects = this._raycaster.intersectObjects(this._scene.children, false)
+		if (intersects.length > 0) {
+			const object = intersects[0].object as Mesh
+			if (object.name.includes('book')) {
+				this.bookSelected = this.getHoverBook(object.name)
+				const newX = (this._cam.position.x + object.position.x) / 2
+				const newY = (this._cam.position.y + object.position.y) / 2
+				const newZ = (this._cam.position.z + object.position.z) / 2
+				gsap.to(object.position, {
+					duration: 1,
+					x: newX,
+					y: newY,
+					z: newZ,
+				})
+				this.addText(this.bookSelected!.bookInfo)
+			}
+		}
+	}
+
+	public resetEvent() {
+		this._raycaster.setFromCamera(mouse, this._cam)
+		const intersects = this._raycaster.intersectObjects(this._scene.children, false)
+		if (intersects.length > 0) {
+			const object = intersects[0].object as Mesh
+			const hoverBook = this.getHoverBook(object.name)
+			if (hoverBook == this.bookSelected) {
+				gsap.to(this.bookSelected!.mesh.position, {
+					duration: 1,
+					x: this.bookSelected?.initCoordinates.x,
+					y: this.bookSelected?.initCoordinates.y,
+					z: this.bookSelected?.initCoordinates.z,
+				})
+				this.removeText()
+				this.bookSelected = null
+			} else {
+				gsap.to(this.bookSelected!.mesh.position, {
+					duration: 1,
+					x: this.bookSelected?.initCoordinates.x,
+					y: this.bookSelected?.initCoordinates.y,
+					z: this.bookSelected?.initCoordinates.z,
+				})
+				this.removeText()
+				this.clickEvent()
+			}
+		}
+	}
+
+	public instatiateBook(book: Book) {
+		book.mesh.position.set(book.initCoordinates.x, book.initCoordinates.y, book.initCoordinates.z)
+		book.mesh.name = book.name
+		book.mesh.rotateY(book.initRotation)
+		book.glowMesh.position.set(book.initCoordinates.x, book.initCoordinates.y, book.initCoordinates.z)
+		book.glowMesh.rotation.set(book.mesh.rotation.x, book.mesh.rotation.y, book.mesh.rotation.z)
+		book.glowMesh.scale.multiplyScalar(1.02)
+		this._scene.add(book.mesh)
+	}
+
+	public getHoverBook(name: string): Book | null {
+		let res = null
+		this.books.forEach((book) => {
+			if (book.name == name) res = book
+		})
+		return res
 	}
 
 	public initialize() {
@@ -131,49 +176,25 @@ export default class GLTFExample extends Example {
 
 		this._scene.add(new AxesHelper(100))
 
-		this.books.bookPetitPrince.position.set(25, 47, 14)
-		this.books.bookPetitPrince.name = 'bookPetitPrince'
-		this.books.bookPetitPrince.rotateY(-Math.PI / 5)
-		this._scene.add(this.books.bookPetitPrince)
-
-		this.books.bookGlowPetitPrince.position.set(
-			this.books.bookPetitPrince.position.x,
-			this.books.bookPetitPrince.position.y,
-			this.books.bookPetitPrince.position.z
-		)
-		this.books.bookGlowPetitPrince.rotation.set(
-			this.books.bookPetitPrince.rotation.x,
-			this.books.bookPetitPrince.rotation.y,
-			this.books.bookPetitPrince.rotation.z
-		)
-		this.books.bookGlowPetitPrince.name = 'bookGlowPetitPrince'
-		this.books.bookGlowPetitPrince.scale.multiplyScalar(1.02)
-
-		this.books.bookMobyDick.position.set(-25, 77, 14)
-		this.books.bookMobyDick.name = 'bookMobyDick'
-		this.books.bookMobyDick.rotateY(-Math.PI / 5)
-		this._scene.add(this.books.bookMobyDick)
-
-		this.books.bookGlowMobyDick.position.set(
-			this.books.bookMobyDick.position.x,
-			this.books.bookMobyDick.position.y,
-			this.books.bookMobyDick.position.z
-		)
-		this.books.bookGlowMobyDick.rotation.set(
-			this.books.bookMobyDick.rotation.x,
-			this.books.bookMobyDick.rotation.y,
-			this.books.bookMobyDick.rotation.z
-		)
-		this.books.bookGlowMobyDick.name = 'bookGlowPetitPrince'
-		this.books.bookGlowMobyDick.scale.multiplyScalar(1.02)
+		this.books.forEach((book) => this.instatiateBook(book))
 
 		this.rotateOnScroll()
 	}
 
 	public initializeBooks() {
+		const loadingManager = new LoadingManager(() => {
+			const loadingScreen = document.getElementById('loading-screen')
+			loadingScreen!.classList.add('fade-out')
+
+			loadingScreen?.addEventListener('transitionend', () => {
+				const loadingScreen = document.getElementById('loading-screen')
+				loadingScreen?.remove()
+			})
+		})
+
 		const dracoLoader = new DRACOLoader()
 		dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.4.3/')
-		const loader = new GLTFLoader()
+		const loader = new GLTFLoader(loadingManager)
 		loader.setDRACOLoader(dracoLoader)
 
 		var library = new Object3D()
@@ -208,6 +229,12 @@ export default class GLTFExample extends Example {
 		})
 	}
 
+	public removeAllGlow() {
+		this.books.forEach((book) => {
+			this._scene.remove(book.glowMesh)
+		})
+	}
+
 	public onMouseMove(ev: MouseEvent) {
 		mouse.x = (ev.clientX / window.innerWidth) * 2 - 1
 		mouse.y = -(ev.clientY / window.innerHeight) * 2 + 1
@@ -228,31 +255,18 @@ export default class GLTFExample extends Example {
 		if (intersects.length > 0) {
 			const object = intersects[0].object as Mesh
 			if (object.name.includes('book')) {
-				switch (object.name) {
-					case 'bookPetitPrince':
-						this._scene.add(this.books.bookGlowPetitPrince)
-						this.books.bookGlowPetitPrince.position.set(
-							this.books.bookPetitPrince.position.x,
-							this.books.bookPetitPrince.position.y,
-							this.books.bookPetitPrince.position.z
-						)
-						break
-					case 'bookMobyDick':
-						this._scene.add(this.books.bookGlowMobyDick)
-						this.books.bookGlowMobyDick.position.set(
-							this.books.bookMobyDick.position.x,
-							this.books.bookMobyDick.position.y,
-							this.books.bookMobyDick.position.z
-						)
-						break
-				}
+				const hoverBook = this.getHoverBook(object.name)
+				this._scene.add(hoverBook!.glowMesh)
+				hoverBook!.glowMesh.position.set(
+					hoverBook!.mesh.position.x,
+					hoverBook!.mesh.position.y,
+					hoverBook!.mesh.position.z
+				)
 			} else {
-				this._scene.remove(this.books.bookGlowPetitPrince)
-				this._scene.remove(this.books.bookGlowMobyDick)
+				this.removeAllGlow()
 			}
 		} else {
-			this._scene.remove(this.books.bookGlowPetitPrince)
-			this._scene.remove(this.books.bookGlowMobyDick)
+			this.removeAllGlow()
 		}
 	}
 
@@ -265,8 +279,8 @@ export default class GLTFExample extends Example {
 		tempV.project(this._cam)
 
 		// convert the normalized position to CSS coordinates
-		const resumeX = (-0.75 * 0.5 + 0.5) * window.innerWidth
-		const resumeY = (0.6 * -0.5 + 0.5) * window.innerHeight
+		const resumeX = (tempV.x - 0.75 * 0.5 + 0.5) * window.innerWidth
+		const resumeY = (tempV.y - 0.6 * -0.5 + 0.5) * window.innerHeight
 
 		// move the elem to that position
 		const labelContainerElem = document.querySelector('#labels')
