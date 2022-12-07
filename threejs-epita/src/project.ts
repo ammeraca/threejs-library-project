@@ -71,7 +71,7 @@ export default class GLTFExample extends Example {
 		mobyDick: {
 			title: 'Moby Dick',
 			resume:
-				"Moby-Dick est un roman de l'écrivain américain Herman Melville paru en 1851" +
+				"Moby-Dick est un roman de l'écrivain américain Herman Melville paru en 1851." +
 				"'L'histoire de Moby Dick est racontée par Ismaël, un marin sur le baleinier Pequod." +
 				"Accompagné par son nouvel ami Queequeg, un harponneur couvert de tatouages, et le reste de l'équipe hétéroclite du navire, ils prennent la mer au départ de Nantucket," +
 				' une île proche du Massachusetts aux États Unis.',
@@ -79,7 +79,8 @@ export default class GLTFExample extends Example {
 		},
 		harryPotter: {
 			title: 'Harry Potter',
-			resume:"Harry Potter est une série littéraire écrite par J. K. Rowling achevée en 2007.La série de sept romans raconte les aventures d'un jeune sorcier nommé Harry Potter et de ses amis Ron Weasley et Hermione Granger à l'école de sorcellerie Poudlard, dirigée par Albus Dumbledore. L'intrigue principale de la série met en scène le combat de Harry contre Lord Voldemort, un mage noir à la recherche de l'immortalité ayant autrefois assassiné les parents du garçon. À la tête de ses fidèles adeptes, les Mangemorts, Voldemort cherche depuis des décennies à acquérir le pouvoir absolu sur le monde des sorciers et des Moldus (les humains dépourvus de pouvoirs magiques).",
+			resume:
+				"Harry Potter est une série littéraire écrite par J. K. Rowling achevée en 2007.La série de sept romans raconte les aventures d'un jeune sorcier nommé Harry Potter et de ses amis Ron Weasley et Hermione Granger à l'école de sorcellerie Poudlard, dirigée par Albus Dumbledore. L'intrigue principale de la série met en scène le combat de Harry contre Lord Voldemort, un mage noir à la recherche de l'immortalité ayant autrefois assassiné les parents du garçon. À la tête de ses fidèles adeptes, les Mangemorts, Voldemort cherche depuis des décennies à acquérir le pouvoir absolu sur le monde des sorciers et des Moldus (les humains dépourvus de pouvoirs magiques).",
 			object: new Object3D(),
 		},
 
@@ -146,6 +147,18 @@ export default class GLTFExample extends Example {
 			glowMesh: this.glowMesh.clone(),
 			bookInfo: this.bookInfos.wonka,
 			initCoordinates: new Vector3(-25, 101.5, -14),
+			initRotation: -Math.PI / 5,
+		},
+
+		{
+			name: 'book-Narnia',
+			mesh: new Mesh(
+				this.bookGeom.clone(),
+				new MeshPhysicalMaterial({ roughness: 0.7, color: 0xd5d52d, bumpScale: 0.002, metalness: 0.2 })
+			),
+			glowMesh: this.glowMesh.clone(),
+			bookInfo: this.bookInfos.narnia,
+			initCoordinates: new Vector3(-5, 45, -25),
 			initRotation: -Math.PI / 5,
 		},
 	]
@@ -284,15 +297,15 @@ export default class GLTFExample extends Example {
 		const loader = new GLTFLoader(loadingManager)
 		loader.setDRACOLoader(dracoLoader)
 
-		var library = new Object3D()
-		loader.load('assets/models/library/scene.gltf', (gltf) => {
-			library = gltf.scene
-			library.name = 'library'
-			library.scale.set(50, 50, 50)
-			library.position.y += 75
-			library.position.z += 125
-			this._scene.add(library)
-		})
+		// var library = new Object3D()
+		// loader.load('assets/models/library/scene.gltf', (gltf) => {
+		// 	library = gltf.scene
+		// 	library.name = 'library'
+		// 	library.scale.set(50, 50, 50)
+		// 	library.position.y += 75
+		// 	library.position.z += 125
+		// 	this._scene.add(library)
+		// })
 
 		var book_case = new Object3D()
 		loader.load('assets/models/bookcase/scene.gltf', (gltf) => {
@@ -324,6 +337,11 @@ export default class GLTFExample extends Example {
 		loader.load('assets/models/wonka/scene.gltf', (gltf) => {
 			this.bookInfos.wonka.object = gltf.scene
 			this.bookInfos.wonka.object.scale.set(100, 100, 100)
+		})
+
+		loader.load('assets/models/aslan/scene.gltf', (gltf) => {
+			this.bookInfos.narnia.object = gltf.scene
+			this.bookInfos.narnia.object.scale.set(0.2, 0.2, 0.2)
 		})
 	}
 
