@@ -268,8 +268,8 @@ export default class GLTFExample extends Example {
 		tempV.project(this._cam)
 
 		// convert the normalized position to CSS coordinates
-		const resumeX = (-0.75 * 0.5 + 0.5) * window.innerWidth
-		const resumeY = (0.6 * -0.5 + 0.5) * window.innerHeight
+		const resumeX = (tempV.x - 0.75 * 0.5 + 0.5) * window.innerWidth
+		const resumeY = (tempV.y - 0.6 * -0.5 + 0.5) * window.innerHeight
 
 		// move the elem to that position
 		const labelContainerElem = document.querySelector('#labels')
