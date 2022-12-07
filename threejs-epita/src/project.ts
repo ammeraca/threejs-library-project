@@ -11,7 +11,6 @@ import {
 	Object3D,
 	Raycaster,
 	ShaderMaterial,
-	SphereGeometry,
 	Vector2,
 	Vector3,
 	WebGLRenderer,
@@ -25,7 +24,7 @@ import { gsap } from 'gsap'
 
 let mouse = new Vector2()
 
-export type BookInfo = { title: string; resume: string }
+export type BookInfo = { title: string; resume: string, object: Object3D }
 export type Book = {
 	name: string
 	mesh: Mesh
@@ -63,13 +62,16 @@ export default class GLTFExample extends Example {
 				"Le Petit Prince est une œuvre de langue française, la plus connue d'Antoine de Saint-Exupéry.\n\n" +
 				"Le premier soir je me suis donc endormi sur le sable à mille milles de toute terre habitée. J'étais bien plus isolé qu'un naufragé sur un radeau au milieu de l'océan. Alors vous imaginez ma surprise, au lever du jour, quand une drôle de petite voix m'a réveillé. Elle disait:" +
 				" -S'il vous plaît... dessine-moi un mouton !",
+			object: new Object3D()
 		},
 		mobyDick: {
 			title: 'Moby Dick',
 			resume:
-				'L´histoire de Moby Dick est racontée par Ismaël, un marin sur le baleinier Pequod. ' +
-				"Accompagné par son nouvel ami Queequeg, un harponneur couvert de tatouages, et le reste de l'équipe hétéroclite du navire, ils prennent la mer au départ de Nantucket ;" +
-				' une île proche du Massachusetts aux États Unis.',
+				"Moby-Dick est un roman de l'écrivain américain Herman Melville paru en 1851" +
+				"'L'histoire de Moby Dick est racontée par Ismaël, un marin sur le baleinier Pequod." +
+				"Accompagné par son nouvel ami Queequeg, un harponneur couvert de tatouages, et le reste de l'équipe hétéroclite du navire, ils prennent la mer au départ de Nantucket," +
+				" une île proche du Massachusetts aux États Unis.",
+			object: new Object3D()
 		},
 	}
 
@@ -245,6 +247,16 @@ export default class GLTFExample extends Example {
 			animated_book.rotateX((3 * Math.PI) / 4)
 			this._scene.add(animated_book)
 		})
+
+		loader.load('assets/models/le_petit_prince/scene.gltf', (gltf) => {
+			this.bookInfos.petitPrince.object = gltf.scene
+			this.bookInfos.petitPrince.object.scale.set(5, 5, 5)
+		})
+
+		loader.load('assets/models/moby_dick/scene.gltf', (gltf) => {
+			this.bookInfos.mobyDick.object = gltf.scene
+			this.bookInfos.mobyDick.object.scale.set(2, 2, 2)
+		})
 	}
 
 	public removeAllGlow() {
@@ -268,6 +280,7 @@ export default class GLTFExample extends Example {
 
 	public update(delta: number): void {
 		this.controls.update()
+		this.story.rotateY(0.001);
 		this._raycaster.setFromCamera(mouse, this._cam)
 		const intersects = this._raycaster.intersectObjects(this._scene.children, false)
 		if (intersects.length > 0) {
@@ -322,19 +335,18 @@ export default class GLTFExample extends Example {
 		title.style.transform = `translate(-50%, -50%) translate(${titleX}px,${titleY}px)`
 	}
 
-	sphere = new Mesh(new SphereGeometry());
+	story = new Object3D();
 
 	private addStory(bookInfo: BookInfo, pos: Vector3){
-		// const name = bookInfo.title;
-		this.sphere.position.x = (this._cam.position.x + pos.x) / 2
-		this.sphere.position.x = (this._cam.position.y + pos.y) / 2
-		this.sphere.position.x = (this._cam.position.z + pos.z) / 2
-
-		this._scene.add(this.sphere)
+			bookInfo.object.position.x = (this._cam.position.x + pos.x) / 2 + 5
+			bookInfo.object.position.y = (this._cam.position.y + pos.y) / 2
+			bookInfo.object.position.z = (this._cam.position.z + pos.z) / 2
+			this.story = bookInfo.object
+			this._scene.add(this.story)
 	}
 
 	private removeStory(){
-		this._scene.remove(this.sphere)
+		this._scene.remove(this.story)
 	}
 
 	private removeText() {
