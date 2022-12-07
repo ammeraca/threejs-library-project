@@ -1,8 +1,0 @@
-Model Information:
-* title:	Abbey Library of Saint Gall , Switzerland.
-* source:	https://sketchfab.com/3d-models/abbey-library-of-saint-gall-switzerland-21c217528169480aad5e9903ac9559cd
-* author:	3d Interiors (https://sketchfab.com/vrInteriors)
-
-Model License:
-* license type:	SKETCHFAB Standard (https://sketchfab.com/licenses)
-* requirements:	Under basic restrictions, use worldwide, on all types of media, commercially or not, and in all types of derivative works

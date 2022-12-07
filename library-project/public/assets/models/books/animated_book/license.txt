@@ -1,8 +1,0 @@
-Model Information:
-* title:	Book - Low poly - Animated
-* source:	https://sketchfab.com/3d-models/book-low-poly-animated-53d4951d3cdd46a5b9bb046038b02981
-* author:	Enalya (https://sketchfab.com/enalya)
-
-Model License:
-* license type:	SKETCHFAB Standard (https://sketchfab.com/licenses)
-* requirements:	Under basic restrictions, use worldwide, on all types of media, commercially or not, and in all types of derivative works

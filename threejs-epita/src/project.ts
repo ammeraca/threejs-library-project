@@ -127,11 +127,11 @@ export default class GLTFExample extends Example {
 			name: 'book-Dracula',
 			mesh: new Mesh(
 				this.bookGeom.clone(),
-				new MeshPhysicalMaterial({ roughness: 0.7, color: 0xff1111, bumpScale: 0.002, metalness: 0.2 })
+				new MeshPhysicalMaterial({ roughness: 0.7, color: 0x991111, bumpScale: 0.002, metalness: 0.2 })
 			),
 			glowMesh: this.glowMesh.clone(),
 			bookInfo: this.bookInfos.dracula,
-			initCoordinates: new Vector3(-25, 100, -14),
+			initCoordinates: new Vector3(-25, 102, -14),
 			initRotation: Math.PI / 5,
 		},
 	]
@@ -245,7 +245,7 @@ export default class GLTFExample extends Example {
 		dir4.position.set(-100, 100, -100)
 		this._scene.add(dir1, dir2, dir3, dir4)
 
-		this._scene.add(new AxesHelper(100))
+		// this._scene.add(new AxesHelper(100))
 
 		this.books.forEach((book) => this.instatiateBook(book))
 
@@ -313,12 +313,12 @@ export default class GLTFExample extends Example {
 
 		loader.load('assets/models/harry_potter/golden_snitch/scene.gltf', (gltf) => {
 			this.bookInfos.harryPotter.object = gltf.scene
-			this.bookInfos.harryPotter.object.scale.set(5, 5, 5)
+			this.bookInfos.harryPotter.object.scale.set(6, 6, 6)
 		})
 
 		loader.load('assets/models/dracula/scene.gltf', (gltf) => {
 			this.bookInfos.dracula.object = gltf.scene
-			this.bookInfos.dracula.object.scale.set(5, 5, 5)
+			this.bookInfos.dracula.object.scale.set(100, 100, 100)
 		})
 	}
 
