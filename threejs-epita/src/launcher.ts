@@ -3,7 +3,6 @@ import {
 	AnimationMixer,
 	Color,
 	Object3D,
-	Vector2,
 	WebGLRenderer,
 } from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
@@ -12,7 +11,6 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 
 import { Example } from './example'
 
-let mouse = new Vector2()
 export default class HomeScreen extends Example {
 	_pivot: Object3D;
 
