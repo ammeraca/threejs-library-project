@@ -98,7 +98,7 @@ export default class GLTFExample extends Example {
 		mermaid: {
 			title: 'La petite sirène',
 			resume:
-				'La Petite Sirène (en danois : Den Lille Havfrue), parfois appelé La Petite Ondine, est un conte de Hans Christian Andersen paru en 1837.',
+				'La Petite Sirène (en danois : Den Lille Havfrue), parfois appelé La Petite Ondine, est un conte de Hans Christian Andersen paru en 1837.Cette histoire se présente très loin de celle racontée par le célèbre studio d’animation Disney. Dans le conte originel, la Petite Sirène tombe sous le charme d’un humain qu’elle sauve de la noyade, mais à la différence de l’adaptation de Disney ce n’est pas sa curiosité pour la vie sur terre, et son amour pour le prince, qui la pousse à vouloir des jambes.',
 			object: new Object3D(),
 		},
 	}
