@@ -5,9 +5,12 @@ import {
 	BackSide,
 	BoxGeometry,
 	Color,
+	DirectionalLight,
 	LoadingManager,
 	Mesh,
 	MeshBasicMaterial,
+	MeshPhysicalMaterial,
+	MeshToonMaterial,
 	Object3D,
 	Raycaster,
 	ShaderMaterial,
@@ -76,7 +79,10 @@ export default class GLTFExample extends Example {
 	public books: Book[] = [
 		{
 			name: 'book-PetitPrince',
-			mesh: new Mesh(this.bookGeom.clone(), new MeshBasicMaterial({ color: new Color(0x601308) })),
+			mesh: new Mesh(
+				this.bookGeom.clone(),
+				new MeshPhysicalMaterial({ roughness: 0.7, color: 0xf4f5f4, bumpScale: 0.002, metalness: 0.2 })
+			),
 			glowMesh: this.glowMesh.clone(),
 			bookInfo: this.bookInfos.petitPrince,
 			initCoordinates: new Vector3(25, 47, 14),
@@ -84,7 +90,10 @@ export default class GLTFExample extends Example {
 		},
 		{
 			name: 'book-MobyDick',
-			mesh: new Mesh(this.bookGeom.clone(), new MeshBasicMaterial({ color: new Color(0x1586a5) })),
+			mesh: new Mesh(
+				this.bookGeom.clone(),
+				new MeshPhysicalMaterial({ roughness: 0.7, color: 0x1568a5, bumpScale: 0.002, metalness: 0.2 })
+			),
 			glowMesh: this.glowMesh.clone(),
 			bookInfo: this.bookInfos.mobyDick,
 			initCoordinates: new Vector3(-25, 47, 14),
@@ -169,6 +178,8 @@ export default class GLTFExample extends Example {
 	public instatiateBook(book: Book) {
 		book.mesh.position.set(book.initCoordinates.x, book.initCoordinates.y, book.initCoordinates.z)
 		book.mesh.name = book.name
+		book.mesh.receiveShadow = true
+		book.mesh.castShadow = true
 		book.mesh.rotateY(book.initRotation)
 		book.glowMesh.position.set(book.initCoordinates.x, book.initCoordinates.y, book.initCoordinates.z)
 		book.glowMesh.rotation.set(book.mesh.rotation.x, book.mesh.rotation.y, book.mesh.rotation.z)
@@ -189,8 +200,15 @@ export default class GLTFExample extends Example {
 
 		this.setControls()
 
-		const dir = new AmbientLight(0xffffff, 3)
-		this._scene.add(dir)
+		const dir1 = new DirectionalLight(0xffffff, 1)
+		dir1.position.set(100, 100, 100)
+		const dir2 = new DirectionalLight(0xffffff, 1)
+		dir2.position.set(-100, 100, 100)
+		const dir3 = new DirectionalLight(0xffffff, 1)
+		dir3.position.set(100, 100, -100)
+		const dir4 = new DirectionalLight(0xffffff, 1)
+		dir4.position.set(-100, 100, -100)
+		this._scene.add(dir1, dir2, dir3, dir4)
 
 		this._scene.add(new AxesHelper(100))
 
@@ -228,6 +246,8 @@ export default class GLTFExample extends Example {
 		var book_case = new Object3D()
 		loader.load('assets/models/bookcase/scene.gltf', (gltf) => {
 			book_case = gltf.scene
+			book_case.castShadow = true
+			book_case.receiveShadow = true
 			book_case.name = 'bookcase'
 			gltf.scene.scale.set(5000, 5000, 5000)
 			this._scene.add(gltf.scene)
@@ -322,9 +342,9 @@ export default class GLTFExample extends Example {
 		title.style.transform = `translate(-50%, -50%) translate(${titleX}px,${titleY}px)`
 	}
 
-	sphere = new Mesh(new SphereGeometry());
+	sphere = new Mesh(new SphereGeometry())
 
-	private addStory(bookInfo: BookInfo, pos: Vector3){
+	private addStory(bookInfo: BookInfo, pos: Vector3) {
 		// const name = bookInfo.title;
 		this.sphere.position.x = (this._cam.position.x + pos.x) / 2
 		this.sphere.position.x = (this._cam.position.y + pos.y) / 2
@@ -333,7 +353,7 @@ export default class GLTFExample extends Example {
 		this._scene.add(this.sphere)
 	}
 
-	private removeStory(){
+	private removeStory() {
 		this._scene.remove(this.sphere)
 	}
 
