@@ -5,6 +5,7 @@ import {
 	BackSide,
 	BoxGeometry,
 	Color,
+	LoadingManager,
 	Mesh,
 	MeshBasicMaterial,
 	Object3D,
@@ -181,20 +182,30 @@ export default class GLTFExample extends Example {
 	}
 
 	public initializeBooks() {
+		const loadingManager = new LoadingManager(() => {
+			const loadingScreen = document.getElementById('loading-screen')
+			loadingScreen!.classList.add('fade-out')
+
+			loadingScreen?.addEventListener('transitionend', () => {
+				const loadingScreen = document.getElementById('loading-screen')
+				loadingScreen?.remove()
+			})
+		})
+
 		const dracoLoader = new DRACOLoader()
 		dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.4.3/')
-		const loader = new GLTFLoader()
+		const loader = new GLTFLoader(loadingManager)
 		loader.setDRACOLoader(dracoLoader)
 
-		// var library = new Object3D()
-		// loader.load('assets/models/library/scene.gltf', (gltf) => {
-		// 	library = gltf.scene
-		// 	library.name = 'library'
-		// 	library.scale.set(50, 50, 50)
-		// 	library.position.y += 75
-		// 	library.position.z += 125
-		// 	this._scene.add(library)
-		// })
+		var library = new Object3D()
+		loader.load('assets/models/library/scene.gltf', (gltf) => {
+			library = gltf.scene
+			library.name = 'library'
+			library.scale.set(50, 50, 50)
+			library.position.y += 75
+			library.position.z += 125
+			this._scene.add(library)
+		})
 
 		var book_case = new Object3D()
 		loader.load('assets/models/bookcase/scene.gltf', (gltf) => {
