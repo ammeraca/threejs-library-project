@@ -49,24 +49,6 @@ const exampleId = params.get('tp') ?? params.get('example') ?? 'texture-example'
 let exampleIndex = examples.findIndex((e) => e.name === exampleId);
 exampleIndex = exampleIndex === -1 ? 0 : exampleIndex;
 
-// const navigateButton = document.getElementById('next');
-// if (previousButton) {
-//   previousButton.addEventListener('click', () => {
-//     const previous = examples[exampleIndex];
-//     exampleIndex = (exampleIndex - 1);
-//     if (exampleIndex < 0) { exampleIndex = examples.length -1; }
-//     const example = examples[exampleIndex];
-//     switchExample(example, previous);
-//   });
-// }
-// if (navigateButton) {
-//   navigateButton.addEventListener('click', () => {
-//     const previous = examples[exampleIndex];
-//     exampleIndex = (exampleIndex + 1) % examples.length;
-//     switchExample(examples[exampleIndex], previous);
-//   });
-// }
-
 const clock = new Clock();
 
 switchExample(examples[exampleIndex]);
