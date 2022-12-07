@@ -56,11 +56,20 @@ export default class GLTFExample extends Example {
 	glowMesh = new Mesh(this.bookGeom.clone(), this.customGlowShader.clone())
 
 	public bookInfos = {
-		petitPrince: { title: 'Le petit prince', resume: 
-		"Le Petit Prince est une œuvre de langue française, la plus connue d'Antoine de Saint-Exupéry.\n\n"
-		+ "Le premier soir je me suis donc endormi sur le sable à mille milles de toute terre habitée. J'étais bien plus isolé qu'un naufragé sur un radeau au milieu de l'océan. Alors vous imaginez ma surprise, au lever du jour, quand une drôle de petite voix m'a réveillé. Elle disait:"
-		+ "- S'il vous plaît... dessine-moi un mouton !" },
-		mobyDick: { title: 'Moby Dick', resume: "Sur un bateau dans l'eau, une baleine fait des siennes" },
+		petitPrince: {
+			title: 'Le petit prince',
+			resume:
+				"Le Petit Prince est une œuvre de langue française, la plus connue d'Antoine de Saint-Exupéry.\n\n" +
+				"Le premier soir je me suis donc endormi sur le sable à mille milles de toute terre habitée. J'étais bien plus isolé qu'un naufragé sur un radeau au milieu de l'océan. Alors vous imaginez ma surprise, au lever du jour, quand une drôle de petite voix m'a réveillé. Elle disait:" +
+				"- S'il vous plaît... dessine-moi un mouton !",
+		},
+		mobyDick: {
+			title: 'Moby Dick',
+			resume:
+				'L´histoire de Moby Dick est racontée par Ismaël, un marin sur le baleinier Pequod. ' +
+				"Accompagné par son nouvel ami Queequeg, un harponneur couvert de tatouages, et le reste de l'équipe hétéroclite du navire, ils prennent la mer au départ de Nantucket ;" +
+				' une île proche du Massachusetts aux États Unis.',
+		},
 	}
 
 	public books: Book[] = [
@@ -70,7 +79,7 @@ export default class GLTFExample extends Example {
 			glowMesh: this.glowMesh.clone(),
 			bookInfo: this.bookInfos.petitPrince,
 			initCoordinates: new Vector3(25, 47, 14),
-			initRotation: - Math.PI / 5,
+			initRotation: -Math.PI / 5,
 		},
 		{
 			name: 'book-MobyDick',
@@ -109,6 +118,7 @@ export default class GLTFExample extends Example {
 			const object = intersects[0].object as Mesh
 			if (object.name.includes('book')) {
 				this.bookSelected = this.getHoverBook(object.name)
+				this.rotateSelectedBook(-this.bookSelected!.initRotation + this._scene.rotation.y)
 				const newX = (this._cam.position.x + object.position.x) / 2
 				const newY = (this._cam.position.y + object.position.y) / 2
 				const newZ = (this._cam.position.z + object.position.z) / 2
@@ -129,6 +139,7 @@ export default class GLTFExample extends Example {
 		if (intersects.length > 0) {
 			const object = intersects[0].object as Mesh
 			const hoverBook = this.getHoverBook(object.name)
+			this.rotateSelectedBook(-this._scene.rotation.y)
 			if (hoverBook == this.bookSelected) {
 				gsap.to(this.bookSelected!.mesh.position, {
 					duration: 1,
@@ -270,6 +281,13 @@ export default class GLTFExample extends Example {
 			}
 		} else {
 			this.removeAllGlow()
+		}
+	}
+
+	public rotateSelectedBook(rotation: number) {
+		if (this.bookSelected != null) {
+			this.bookSelected.mesh.rotation.y = rotation
+			this.bookSelected.glowMesh.rotation.y = rotation
 		}
 	}
 
