@@ -149,7 +149,6 @@ export default class GLTFExample extends Example {
 			initCoordinates: new Vector3(-25, 101.5, -14),
 			initRotation: -Math.PI / 5,
 		},
-
 		{
 			name: 'book-Narnia',
 			mesh: new Mesh(
@@ -160,6 +159,17 @@ export default class GLTFExample extends Example {
 			bookInfo: this.bookInfos.narnia,
 			initCoordinates: new Vector3(-5, 45, -25),
 			initRotation: -Math.PI / 5,
+		},
+		{
+			name: 'book-Mermaid',
+			mesh: new Mesh(
+				this.bookGeom.clone(),
+				new MeshPhysicalMaterial({ roughness: 0.7, color: 0x2f6ea8, bumpScale: 0.002, metalness: 0.2 })
+			),
+			glowMesh: this.glowMesh.clone(),
+			bookInfo: this.bookInfos.mermaid,
+			initCoordinates: new Vector3(-25, 101.5, 15),
+			initRotation: Math.PI / 5,
 		},
 	]
 
@@ -342,6 +352,11 @@ export default class GLTFExample extends Example {
 		loader.load('assets/models/aslan/scene.gltf', (gltf) => {
 			this.bookInfos.narnia.object = gltf.scene
 			this.bookInfos.narnia.object.scale.set(0.2, 0.2, 0.2)
+		})
+
+		loader.load('assets/models/mermaid/scene.gltf', (gltf) => {
+			this.bookInfos.mermaid.object = gltf.scene
+			this.bookInfos.mermaid.object.scale.set(0.4, 0.4, 0.4)
 		})
 	}
 

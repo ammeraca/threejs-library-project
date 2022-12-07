@@ -1,0 +1,11 @@
+Model Information:
+* title:	Mermaid 3DScan
+* source:	https://sketchfab.com/3d-models/mermaid-3dscan-a71c8628d49f49ffa36d8d0bc44f6d89
+* author:	Sakchai.Sompila (https://sketchfab.com/Sakchai.Sompila)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Mermaid 3DScan" (https://sketchfab.com/3d-models/mermaid-3dscan-a71c8628d49f49ffa36d8d0bc44f6d89) by Sakchai.Sompila (https://sketchfab.com/Sakchai.Sompila) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
