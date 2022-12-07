@@ -47,7 +47,7 @@ export class Example {
 	constructor(renderer: WebGLRenderer) {
 		this._renderer = renderer
 		this._scene = new Scene()
-		this._cam = new PerspectiveCamera(45)
+		this._cam = new PerspectiveCamera(45, 1, 0.1, 10000)
 		this._cam.position.set(0, 25, 175)
 
 		this._gui = new GUI()

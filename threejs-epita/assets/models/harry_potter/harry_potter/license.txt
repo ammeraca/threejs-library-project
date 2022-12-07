@@ -1,0 +1,11 @@
+Model Information:
+* title:	HARRY POTTER
+* source:	https://sketchfab.com/3d-models/harry-potter-119b45b309344062b772685daee19d7d
+* author:	spyder fpv (https://sketchfab.com/spyderfpv)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "HARRY POTTER" (https://sketchfab.com/3d-models/harry-potter-119b45b309344062b772685daee19d7d) by spyder fpv (https://sketchfab.com/spyderfpv) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
