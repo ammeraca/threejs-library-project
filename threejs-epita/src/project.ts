@@ -79,13 +79,26 @@ export default class GLTFExample extends Example {
 		},
 		harryPotter: {
 			title: 'Harry Potter',
-			resume: 'Harry Potter est un sorcier',
+			resume:"Harry Potter est une série littéraire écrite par J. K. Rowling achevée en 2007.La série de sept romans raconte les aventures d'un jeune sorcier nommé Harry Potter et de ses amis Ron Weasley et Hermione Granger à l'école de sorcellerie Poudlard, dirigée par Albus Dumbledore. L'intrigue principale de la série met en scène le combat de Harry contre Lord Voldemort, un mage noir à la recherche de l'immortalité ayant autrefois assassiné les parents du garçon. À la tête de ses fidèles adeptes, les Mangemorts, Voldemort cherche depuis des décennies à acquérir le pouvoir absolu sur le monde des sorciers et des Moldus (les humains dépourvus de pouvoirs magiques).",
 			object: new Object3D(),
 		},
 
+		narnia: {
+			title: 'Narnia',
+			resume:
+				"Le Monde de Narnia, en anglais The Chronicles of Narnia, est une œuvre littéraire en sept tomes de l'écrivain britannique C. S. Lewis. Elle est considérée comme un classique de la littérature anglo-saxonne pour enfants et est l'œuvre la plus connue de l'auteur. Le Monde de Narnia relate les aventures d'enfants qui jouent un rôle central dans l'histoire du royaume fictif de Narnia, un endroit où les animaux parlent, la magie est courante, et le bien combat le mal. ",
+			object: new Object3D(),
+		},
 		wonka: {
-			title: 'Dracula',
-			resume: 'Seul dans son chateau en Transylvanie, le comte déchû attend',
+			title: 'Charlie et la chocolaterie',
+			resume:
+				"Dans cette célèbre histoire de Roald Dahl, Charlie ne rêve que de chocolat, mais son père, visseur de capuchons sur tubes de dentifrice, ne peut lui offrir qu'un bâton de chocolat par an, pour son anniversaire. Un jour, le petit garçon apprend que Monsieur Wonka, le directeur de la chocolaterie, invite les cinq enfants qui auront découvert un ticket d'or dans leur barre de chocolat à visiter sa fabrique. Rivières de chocolat, papiers peints comestibles, bonbons éternels et oreillers en guimauve. Un savoureux classique de la gastronomie enfantine.",
+			object: new Object3D(),
+		},
+		mermaid: {
+			title: 'La petite sirène',
+			resume:
+				'La Petite Sirène (en danois : Den Lille Havfrue), parfois appelé La Petite Ondine, est un conte de Hans Christian Andersen paru en 1837.',
 			object: new Object3D(),
 		},
 	}
