@@ -83,7 +83,7 @@ export default class GLTFExample extends Example {
 			object: new Object3D(),
 		},
 
-		dracula: {
+		wonka: {
 			title: 'Dracula',
 			resume: 'Seul dans son chateau en Transylvanie, le comte déchû attend',
 			object: new Object3D(),
@@ -122,18 +122,18 @@ export default class GLTFExample extends Example {
 			glowMesh: this.glowMesh.clone(),
 			bookInfo: this.bookInfos.harryPotter,
 			initCoordinates: new Vector3(15, 74, -19),
-			initRotation: 2*Math.PI / 5,
+			initRotation: (2 * Math.PI) / 5,
 		},
 		{
-			name: 'book-Dracula',
+			name: 'book-Wonka',
 			mesh: new Mesh(
 				this.bookGeom.clone(),
-				new MeshPhysicalMaterial({ roughness: 0.7, color: 0x991111, bumpScale: 0.002, metalness: 0.2})
+				new MeshPhysicalMaterial({ roughness: 0.7, color: 0x991111, bumpScale: 0.002, metalness: 0.2 })
 			),
 			glowMesh: this.glowMesh.clone(),
-			bookInfo: this.bookInfos.dracula,
+			bookInfo: this.bookInfos.wonka,
 			initCoordinates: new Vector3(-25, 101.5, -14),
-			initRotation: - Math.PI / 5,
+			initRotation: -Math.PI / 5,
 		},
 	]
 
@@ -291,7 +291,6 @@ export default class GLTFExample extends Example {
 			this._scene.add(gltf.scene)
 		})
 
-
 		this.createNeutralBooks()
 
 		loader.load('assets/models/le_petit_prince/scene.gltf', (gltf) => {
@@ -309,16 +308,18 @@ export default class GLTFExample extends Example {
 			this.bookInfos.harryPotter.object.scale.set(6, 6, 6)
 		})
 
-		loader.load('assets/models/dracula/scene.gltf', (gltf) => {
-			this.bookInfos.dracula.object = gltf.scene
-			this.bookInfos.dracula.object.scale.set(100, 100, 100)
+		loader.load('assets/models/wonka/scene.gltf', (gltf) => {
+			this.bookInfos.wonka.object = gltf.scene
+			this.bookInfos.wonka.object.scale.set(100, 100, 100)
 		})
 	}
 
 	private createNeutralBooks() {
-		const createBook = (color: ColorRepresentation, x : number, y: number, z : number, rotation: number) => {
-			const book = new Mesh(this.bookGeom.clone(),
-				new MeshPhysicalMaterial({ roughness: 0.7, color: color, bumpScale: 0.002, metalness: 0.2 }))
+		const createBook = (color: ColorRepresentation, x: number, y: number, z: number, rotation: number) => {
+			const book = new Mesh(
+				this.bookGeom.clone(),
+				new MeshPhysicalMaterial({ roughness: 0.7, color: color, bumpScale: 0.002, metalness: 0.2 })
+			)
 			book.position.set(x, y, z)
 			book.rotateY(rotation)
 			this._scene.add(book)
@@ -326,15 +327,15 @@ export default class GLTFExample extends Example {
 		createBook(0x372400, 25, 45, -14, Math.PI / 5)
 		createBook(0x112324, 28, 45, -11, Math.PI / 5)
 		createBook(0x223435, 31, 45, -8, Math.PI / 5)
-		createBook(0x243211, 15, 20, -27, 2*Math.PI / 5)
-		createBook(0x070707, 18, 20, -24, 2*Math.PI / 5)
+		createBook(0x243211, 15, 20, -27, (2 * Math.PI) / 5)
+		createBook(0x070707, 18, 20, -24, (2 * Math.PI) / 5)
 		createBook(0x125327, -25, 20, 21, Math.PI / 5)
 		createBook(0xafebcd, -29, 20, 19, Math.PI / 5)
 		createBook(0xefebcd, -33, 20, 17, Math.PI / 5)
 		createBook(0x661111, 21.5, 74, 20.5, -Math.PI / 5)
 		createBook(0x665511, 23.5, 74, 17, -Math.PI / 5)
 		createBook(0x331111, -28, 101.5, -10, -Math.PI / 5)
-		createBook(0x111155, -21, 45, 17, Math.PI / 5);
+		createBook(0x111155, -21, 45, 17, Math.PI / 5)
 	}
 
 	public removeAllGlow() {
