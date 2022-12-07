@@ -4,14 +4,6 @@ import { Example } from './example';
 // @ts-ignore
 const modules = import.meta.glob('./project.ts');
 
-/**
- * Extracts the modules found in `modules`, and instanciate
- * each example
- *
- * @param renderer - The renderer used to instanciate each example
- *
- * @return An array of example
- */
 async function loadExamples(renderer: WebGLRenderer): Promise<Example[]> {
   const promises = [];
   for (const path in modules) {

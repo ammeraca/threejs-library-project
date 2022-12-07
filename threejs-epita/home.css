@@ -24,20 +24,20 @@ body {
 }
 
 #labels {
-	position: absolute; /* let us position ourself inside the container */
-	left: 0; /* make our position the top left of the container */
+	position: absolute;
+	left: 0;
 	top: 0;
 	color: white;
 	width: 25rem;
 }
 #labels > div {
-	position: absolute; /* let us position them inside the container */
-	left: 0; /* make their default position the top left of the container */
+	position: absolute;
+	left: 0;
 	top: 0;
-	cursor: pointer; /* change the cursor to a hand when over us */
+	cursor: pointer;
 	font-size: large;
-	user-select: none; /* don't let the text get selected */
-	text-shadow:         /* create a black outline */ -1px -1px 0 #000, 0 -1px 0 #000, 1px -1px 0 #000, 1px 0 0 #000,
+	user-select: none;
+	text-shadow: -1px -1px 0 #000, 0 -1px 0 #000, 1px -1px 0 #000, 1px 0 0 #000,
 		1px 1px 0 #000, 0 1px 0 #000, -1px 1px 0 #000, -1px 0 0 #000;
 }
 
@@ -48,8 +48,7 @@ body {
 	left: 0;
 	width: 100%;
 	height: 100%;
-	/* COULEUR FOND */
-	background-color: #000000;
+	background-color: #ffffff;
 	opacity: 1;
 	transition: 1s opacity;
 }
@@ -59,7 +58,7 @@ body {
 }
 
 h1 {
-	color: #ffffff;
+	color: #888888;
 	text-align: center;
 	font-family: sans-serif;
 	text-transform: uppercase;
@@ -91,14 +90,12 @@ h1:after {
 	width: 150px;
 	height: 225px;
 	border: 4px solid #ffffff;
-	/* COULEUR FOND */
 	border-left: 1px solid #ffffff;
 	margin: 0;
 	position: absolute;
 	right: -4px;
 	top: -4px;
 	overflow: hidden;
-	/* COULEUR FOND */
 	background: #ffffff;
 	transform-style: preserve-3d;
 	-webkit-transform-origin: left center;
@@ -120,7 +117,6 @@ h1:after {
 	animation: pageTurn 1.2s cubic-bezier(0, 0.39, 1, 0.68) 1.2s infinite;
 }
 
-/* Page turn */
 
 @-webkit-keyframes pageTurn {
 	0% {
@@ -128,17 +124,14 @@ h1:after {
 		transform: rotateY(0deg);
 	}
 	20% {
-		/* COULEUR PAGE */
 		background: #aaaaaa;
 	}
 	40% {
-		/* COULEUR FOND */
 		background: #333333;
 		-webkit-transform: rotateY(-180deg);
 		transform: rotateY(-180deg);
 	}
 	100% {
-		/* COULEUR FOND */
 		background: #333333;
 		-webkit-transform: rotateY(-180deg);
 		transform: rotateY(-180deg);
@@ -150,16 +143,13 @@ h1:after {
 		transform: rotateY(0deg);
 	}
 	20% {
-		/* COULEUR PAGE*/
 		background: #ffd4a2;
 	}
 	40% {
-		/* COULEUR FOND */
 		background: #ffd4a2;
 		transform: rotateY(-180deg);
 	}
 	100% {
-		/* COULEUR FOND */
 		background: #d9ffe6;
 		transform: rotateY(-180deg);
 	}

@@ -70,14 +70,6 @@ export default class HomeScreen extends Example {
 
 	public update(delta: number): void {
 		this._pivot.rotateY(0.001);
-
-		// this.lightGroup.traverse((child) => {
-    //   const light = (child as PointLight);
-    //   if (light) {
-    //     light.intensity = Math.random();
-		// 		light.position.set(Math.random(), Math.random(), Math.random())
-    //   }
-    // });
 	}
 
 	public render(): void {
