@@ -27,7 +27,7 @@ import { gsap } from 'gsap'
 
 let mouse = new Vector2()
 
-export type BookInfo = { title: string; resume: string, object: Object3D }
+export type BookInfo = { title: string; resume: string; object: Object3D }
 export type Book = {
 	name: string
 	mesh: Mesh
@@ -65,7 +65,7 @@ export default class GLTFExample extends Example {
 				"Le Petit Prince est une œuvre de langue française, la plus connue d'Antoine de Saint-Exupéry.\n\n" +
 				"Le premier soir je me suis donc endormi sur le sable à mille milles de toute terre habitée. J'étais bien plus isolé qu'un naufragé sur un radeau au milieu de l'océan. Alors vous imaginez ma surprise, au lever du jour, quand une drôle de petite voix m'a réveillé. Elle disait:" +
 				" -S'il vous plaît... dessine-moi un mouton !",
-			object: new Object3D()
+			object: new Object3D(),
 		},
 		mobyDick: {
 			title: 'Moby Dick',
@@ -73,8 +73,13 @@ export default class GLTFExample extends Example {
 				"Moby-Dick est un roman de l'écrivain américain Herman Melville paru en 1851" +
 				"'L'histoire de Moby Dick est racontée par Ismaël, un marin sur le baleinier Pequod." +
 				"Accompagné par son nouvel ami Queequeg, un harponneur couvert de tatouages, et le reste de l'équipe hétéroclite du navire, ils prennent la mer au départ de Nantucket," +
-				" une île proche du Massachusetts aux États Unis.",
-			object: new Object3D()
+				' une île proche du Massachusetts aux États Unis.',
+			object: new Object3D(),
+		},
+		harryPotter: {
+			title: 'Harry Potter',
+			resume: 'Harry Potter est un sorcier',
+			object: new Object3D(),
 		},
 	}
 
@@ -99,6 +104,17 @@ export default class GLTFExample extends Example {
 			glowMesh: this.glowMesh.clone(),
 			bookInfo: this.bookInfos.mobyDick,
 			initCoordinates: new Vector3(-25, 47, 14),
+			initRotation: Math.PI / 5,
+		},
+		{
+			name: 'book-HarryPotter',
+			mesh: new Mesh(
+				this.bookGeom.clone(),
+				new MeshPhysicalMaterial({ roughness: 0.7, color: 0xffbf00, bumpScale: 0.002, metalness: 0.2 })
+			),
+			glowMesh: this.glowMesh.clone(),
+			bookInfo: this.bookInfos.harryPotter,
+			initCoordinates: new Vector3(25, 74, -14),
 			initRotation: Math.PI / 5,
 		},
 	]
@@ -277,6 +293,11 @@ export default class GLTFExample extends Example {
 			this.bookInfos.mobyDick.object = gltf.scene
 			this.bookInfos.mobyDick.object.scale.set(2, 2, 2)
 		})
+
+		loader.load('assets/models/harry_potter/golden_snitch/scene.gltf', (gltf) => {
+			this.bookInfos.harryPotter.object = gltf.scene
+			this.bookInfos.harryPotter.object.scale.set(5, 5, 5)
+		})
 	}
 
 	public removeAllGlow() {
@@ -300,7 +321,7 @@ export default class GLTFExample extends Example {
 
 	public update(delta: number): void {
 		this.controls.update()
-		this.story.rotateY(0.001);
+		this.story.rotateY(0.001)
 		this._raycaster.setFromCamera(mouse, this._cam)
 		const intersects = this._raycaster.intersectObjects(this._scene.children, false)
 		if (intersects.length > 0) {
@@ -354,17 +375,17 @@ export default class GLTFExample extends Example {
 		const titleY = (tempV.y * -0.5 - 0.1) * window.innerHeight
 		title.style.transform = `translate(-50%, -50%) translate(${titleX}px,${titleY}px)`
 	}
-	story = new Object3D();
+	story = new Object3D()
 
-	private addStory(bookInfo: BookInfo, pos: Vector3){
-			bookInfo.object.position.x = (this._cam.position.x + pos.x) / 2 + 5
-			bookInfo.object.position.y = (this._cam.position.y + pos.y) / 2
-			bookInfo.object.position.z = (this._cam.position.z + pos.z) / 2
-			this.story = bookInfo.object
-			this._scene.add(this.story)
+	private addStory(bookInfo: BookInfo, pos: Vector3) {
+		bookInfo.object.position.x = (this._cam.position.x + pos.x) / 2 + 5
+		bookInfo.object.position.y = (this._cam.position.y + pos.y) / 2
+		bookInfo.object.position.z = (this._cam.position.z + pos.z) / 2
+		this.story = bookInfo.object
+		this._scene.add(this.story)
 	}
 
-	private removeStory(){
+	private removeStory() {
 		this._scene.remove(this.story)
 	}
 
