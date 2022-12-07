@@ -11,6 +11,7 @@ import {
 	Object3D,
 	Raycaster,
 	ShaderMaterial,
+	SphereGeometry,
 	Vector2,
 	Vector3,
 	WebGLRenderer,
@@ -58,8 +59,8 @@ export default class GLTFExample extends Example {
 	public bookInfos = {
 		petitPrince: { title: 'Le petit prince', resume: 
 		"Le Petit Prince est une œuvre de langue française, la plus connue d'Antoine de Saint-Exupéry.\n\n"
-		+ "Le premier soir je me suis donc endormi sur le sable à mille milles de toute terre habitée. J'étais bien plus isolé qu'un naufragé sur un radeau au milieu de l'océan. Alors vous imaginez ma surprise, au lever du jour, quand une drôle de petite voix m'a réveillé. Elle disait:"
-		+ "- S'il vous plaît... dessine-moi un mouton !" },
+		+ "\"Le premier soir je me suis donc endormi sur le sable à mille milles de toute terre habitée. J'étais bien plus isolé qu'un naufragé sur un radeau au milieu de l'océan. Alors vous imaginez ma surprise, au lever du jour, quand une drôle de petite voix m'a réveillé. Elle disait:"
+		+ " -S'il vous plaît... dessine-moi un mouton !\"" },
 		mobyDick: { title: 'Moby Dick', resume: "Sur un bateau dans l'eau, une baleine fait des siennes" },
 	}
 
@@ -119,6 +120,7 @@ export default class GLTFExample extends Example {
 					z: newZ,
 				})
 				this.addText(this.bookSelected!.bookInfo)
+				this.addStory(this.bookSelected!.bookInfo, new Vector3(newX, newY, newZ))
 			}
 		}
 	}
@@ -137,6 +139,7 @@ export default class GLTFExample extends Example {
 					z: this.bookSelected?.initCoordinates.z,
 				})
 				this.removeText()
+				this.removeStory()
 				this.bookSelected = null
 			} else {
 				gsap.to(this.bookSelected!.mesh.position, {
@@ -146,6 +149,7 @@ export default class GLTFExample extends Example {
 					z: this.bookSelected?.initCoordinates.z,
 				})
 				this.removeText()
+				this.removeStory()
 				this.clickEvent()
 			}
 		}
@@ -298,6 +302,21 @@ export default class GLTFExample extends Example {
 		const titleX = (tempV.x * 0.5 + 0.5) * window.innerWidth
 		const titleY = (tempV.y * -0.5 - 0.1) * window.innerHeight
 		title.style.transform = `translate(-50%, -50%) translate(${titleX}px,${titleY}px)`
+	}
+
+	sphere = new Mesh(new SphereGeometry());
+
+	private addStory(bookInfo: BookInfo, pos: Vector3){
+		// const name = bookInfo.title;
+		this.sphere.position.x = (this._cam.position.x + pos.x) / 2
+		this.sphere.position.x = (this._cam.position.y + pos.y) / 2
+		this.sphere.position.x = (this._cam.position.z + pos.z) / 2
+
+		this._scene.add(this.sphere)
+	}
+
+	private removeStory(){
+		this._scene.remove(this.sphere)
 	}
 
 	private removeText() {

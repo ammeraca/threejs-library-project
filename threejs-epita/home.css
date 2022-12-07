@@ -49,7 +49,7 @@ body {
 	width: 100%;
 	height: 100%;
 	/* COULEUR FOND */
-	background-color: #333333;
+	background-color: #000000;
 	opacity: 1;
 	transition: 1s opacity;
 }
@@ -92,14 +92,14 @@ h1:after {
 	height: 225px;
 	border: 4px solid #ffffff;
 	/* COULEUR FOND */
-	border-left: 1px solid #333333;
+	border-left: 1px solid #ffffff;
 	margin: 0;
 	position: absolute;
 	right: -4px;
 	top: -4px;
 	overflow: hidden;
 	/* COULEUR FOND */
-	background: #333333;
+	background: #ffffff;
 	transform-style: preserve-3d;
 	-webkit-transform-origin: left center;
 	transform-origin: left center;
@@ -129,7 +129,7 @@ h1:after {
 	}
 	20% {
 		/* COULEUR PAGE */
-		background: #555555;
+		background: #aaaaaa;
 	}
 	40% {
 		/* COULEUR FOND */
@@ -151,16 +151,16 @@ h1:after {
 	}
 	20% {
 		/* COULEUR PAGE*/
-		background: #555555;
+		background: #ffd4a2;
 	}
 	40% {
 		/* COULEUR FOND */
-		background: #333333;
+		background: #ffd4a2;
 		transform: rotateY(-180deg);
 	}
 	100% {
 		/* COULEUR FOND */
-		background: #333333;
+		background: #d9ffe6;
 		transform: rotateY(-180deg);
 	}
 }
