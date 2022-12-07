@@ -5,6 +5,7 @@ import {
 	BackSide,
 	BoxGeometry,
 	Color,
+	ColorRepresentation,
 	DirectionalLight,
 	LoadingManager,
 	Mesh,
@@ -98,7 +99,7 @@ export default class GLTFExample extends Example {
 			),
 			glowMesh: this.glowMesh.clone(),
 			bookInfo: this.bookInfos.petitPrince,
-			initCoordinates: new Vector3(25, 47, 14),
+			initCoordinates: new Vector3(25, 74, 14),
 			initRotation: -Math.PI / 5,
 		},
 		{
@@ -109,7 +110,7 @@ export default class GLTFExample extends Example {
 			),
 			glowMesh: this.glowMesh.clone(),
 			bookInfo: this.bookInfos.mobyDick,
-			initCoordinates: new Vector3(-25, 47, 14),
+			initCoordinates: new Vector3(-25, 45, 14),
 			initRotation: Math.PI / 5,
 		},
 		{
@@ -120,7 +121,7 @@ export default class GLTFExample extends Example {
 			),
 			glowMesh: this.glowMesh.clone(),
 			bookInfo: this.bookInfos.harryPotter,
-			initCoordinates: new Vector3(25, 74, -14),
+			initCoordinates: new Vector3(15, 74, -19),
 			initRotation: 2*Math.PI / 5,
 		},
 		{
@@ -131,7 +132,7 @@ export default class GLTFExample extends Example {
 			),
 			glowMesh: this.glowMesh.clone(),
 			bookInfo: this.bookInfos.dracula,
-			initCoordinates: new Vector3(-25, 102, -14),
+			initCoordinates: new Vector3(-25, 101.5, -14),
 			initRotation: - Math.PI / 5,
 		},
 	]
@@ -163,7 +164,7 @@ export default class GLTFExample extends Example {
 			const object = intersects[0].object as Mesh
 			if (object.name.includes('book')) {
 				this.bookSelected = this.getHoverBook(object.name)
-				this.rotateSelectedBook(-this.bookSelected!.initRotation + this._scene.rotation.y)
+				this.rotateSelectedBook(this._scene.rotation.y - this.bookSelected!.initRotation)
 				const newX = (this._cam.position.x + object.position.x) / 2
 				const newY = (this._cam.position.y + object.position.y) / 2
 				const newZ = (this._cam.position.z + object.position.z) / 2
@@ -185,13 +186,14 @@ export default class GLTFExample extends Example {
 		if (intersects.length > 0) {
 			const object = intersects[0].object as Mesh
 			const hoverBook = this.getHoverBook(object.name)
-			this.rotateSelectedBook(-this._scene.rotation.y)
+			this.rotateSelectedBook(this.bookSelected!.initRotation - this._scene.rotation.y)
 			if (hoverBook == this.bookSelected) {
 				gsap.to(this.bookSelected!.mesh.position, {
 					duration: 1,
 					x: this.bookSelected?.initCoordinates.x,
 					y: this.bookSelected?.initCoordinates.y,
 					z: this.bookSelected?.initCoordinates.z,
+					// rotateY: this.bookSelected?.initRotation,
 				})
 				this.removeText()
 				this.removeStory()
@@ -202,6 +204,7 @@ export default class GLTFExample extends Example {
 					x: this.bookSelected?.initCoordinates.x,
 					y: this.bookSelected?.initCoordinates.y,
 					z: this.bookSelected?.initCoordinates.z,
+					// rotateY: this.bookSelected?.initRotation,
 				})
 				this.removeText()
 				this.removeStory()
@@ -288,18 +291,8 @@ export default class GLTFExample extends Example {
 			this._scene.add(gltf.scene)
 		})
 
-		// var animated_book
-		// loader.load('assets/models/books/animated_book/scene.gltf', (gltf) => {
-		// 	animated_book = gltf.scene
-		// 	animated_book.name = 'book2'
-		// 	animated_book.scale.set(0.01, 0.01, 0.01)
-		// 	animated_book.position.x = 27
-		// 	animated_book.position.y = 45
-		// 	animated_book.position.z = -22
-		// 	animated_book.rotateZ(Math.PI / 2)
-		// 	animated_book.rotateX((3 * Math.PI) / 4)
-		// 	this._scene.add(animated_book)
-		// })
+
+		this.createNeutralBooks()
 
 		loader.load('assets/models/le_petit_prince/scene.gltf', (gltf) => {
 			this.bookInfos.petitPrince.object = gltf.scene
@@ -320,6 +313,28 @@ export default class GLTFExample extends Example {
 			this.bookInfos.dracula.object = gltf.scene
 			this.bookInfos.dracula.object.scale.set(100, 100, 100)
 		})
+	}
+
+	private createNeutralBooks() {
+		const createBook = (color: ColorRepresentation, x : number, y: number, z : number, rotation: number) => {
+			const book = new Mesh(this.bookGeom.clone(),
+				new MeshPhysicalMaterial({ roughness: 0.7, color: color, bumpScale: 0.002, metalness: 0.2 }))
+			book.position.set(x, y, z)
+			book.rotateY(rotation)
+			this._scene.add(book)
+		}
+		createBook(0x372400, 25, 45, -14, Math.PI / 5)
+		createBook(0x112324, 28, 45, -11, Math.PI / 5)
+		createBook(0x223435, 31, 45, -8, Math.PI / 5)
+		createBook(0x243211, 15, 20, -27, 2*Math.PI / 5)
+		createBook(0x070707, 18, 20, -24, 2*Math.PI / 5)
+		createBook(0x125327, -25, 20, 21, Math.PI / 5)
+		createBook(0xafebcd, -29, 20, 19, Math.PI / 5)
+		createBook(0xefebcd, -33, 20, 17, Math.PI / 5)
+		createBook(0x661111, 21.5, 74, 20.5, -Math.PI / 5)
+		createBook(0x665511, 23.5, 74, 17, -Math.PI / 5)
+		createBook(0x331111, -28, 101.5, -10, -Math.PI / 5)
+		createBook(0x111155, -21, 45, 17, Math.PI / 5);
 	}
 
 	public removeAllGlow() {
