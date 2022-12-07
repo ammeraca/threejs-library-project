@@ -83,7 +83,6 @@ export default class GLTFExample extends Example {
 				"Harry Potter est une série littéraire écrite par J. K. Rowling achevée en 2007.La série de sept romans raconte les aventures d'un jeune sorcier nommé Harry Potter et de ses amis Ron Weasley et Hermione Granger à l'école de sorcellerie Poudlard, dirigée par Albus Dumbledore. L'intrigue principale de la série met en scène le combat de Harry contre Lord Voldemort, un mage noir à la recherche de l'immortalité ayant autrefois assassiné les parents du garçon. À la tête de ses fidèles adeptes, les Mangemorts, Voldemort cherche depuis des décennies à acquérir le pouvoir absolu sur le monde des sorciers et des Moldus (les humains dépourvus de pouvoirs magiques).",
 			object: new Object3D(),
 		},
-
 		narnia: {
 			title: 'Narnia',
 			resume:
@@ -351,7 +350,7 @@ export default class GLTFExample extends Example {
 
 		loader.load('assets/models/aslan/scene.gltf', (gltf) => {
 			this.bookInfos.narnia.object = gltf.scene
-			this.bookInfos.narnia.object.scale.set(0.2, 0.2, 0.2)
+			this.bookInfos.narnia.object.scale.set(5, 5, 5)
 		})
 
 		loader.load('assets/models/mermaid/scene.gltf', (gltf) => {

@@ -1,11 +1,11 @@
 Model Information:
-* title:	Recumbent lion
-* source:	https://sketchfab.com/3d-models/recumbent-lion-455b37b9e58d43dba5b6c0ab269e242a
-* author:	Geoffrey Marchal (https://sketchfab.com/geoffreymarchal)
+* title:	King of Narnia: ASLAN
+* source:	https://sketchfab.com/3d-models/king-of-narnia-aslan-c283c87ee2164dd7a7e1bfb1c29898d4
+* author:	Anahit Takiryan (https://sketchfab.com/anahit.takiryan)
 
 Model License:
-* license type:	CC-BY-NC-4.0 (http://creativecommons.org/licenses/by-nc/4.0/)
-* requirements:	Author must be credited. No commercial use.
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
 
 If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
-This work is based on "Recumbent lion" (https://sketchfab.com/3d-models/recumbent-lion-455b37b9e58d43dba5b6c0ab269e242a) by Geoffrey Marchal (https://sketchfab.com/geoffreymarchal) licensed under CC-BY-NC-4.0 (http://creativecommons.org/licenses/by-nc/4.0/)
+This work is based on "King of Narnia: ASLAN" (https://sketchfab.com/3d-models/king-of-narnia-aslan-c283c87ee2164dd7a7e1bfb1c29898d4) by Anahit Takiryan (https://sketchfab.com/anahit.takiryan) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
