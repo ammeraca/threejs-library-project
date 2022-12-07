@@ -297,15 +297,15 @@ export default class GLTFExample extends Example {
 		const loader = new GLTFLoader(loadingManager)
 		loader.setDRACOLoader(dracoLoader)
 
-		// var library = new Object3D()
-		// loader.load('assets/models/library/scene.gltf', (gltf) => {
-		// 	library = gltf.scene
-		// 	library.name = 'library'
-		// 	library.scale.set(50, 50, 50)
-		// 	library.position.y += 75
-		// 	library.position.z += 125
-		// 	this._scene.add(library)
-		// })
+		var library = new Object3D()
+		loader.load('assets/models/library/scene.gltf', (gltf) => {
+			library = gltf.scene
+			library.name = 'library'
+			library.scale.set(50, 50, 50)
+			library.position.y += 75
+			library.position.z += 125
+			this._scene.add(library)
+		})
 
 		var book_case = new Object3D()
 		loader.load('assets/models/bookcase/scene.gltf', (gltf) => {
