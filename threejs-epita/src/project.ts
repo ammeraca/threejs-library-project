@@ -81,6 +81,12 @@ export default class GLTFExample extends Example {
 			resume: 'Harry Potter est un sorcier',
 			object: new Object3D(),
 		},
+
+		dracula: {
+			title: 'Dracula',
+			resume: 'Seul dans son chateau en Transylvanie, le comte déchû attend',
+			object: new Object3D(),
+		},
 	}
 
 	public books: Book[] = [
@@ -115,6 +121,17 @@ export default class GLTFExample extends Example {
 			glowMesh: this.glowMesh.clone(),
 			bookInfo: this.bookInfos.harryPotter,
 			initCoordinates: new Vector3(25, 74, -14),
+			initRotation: Math.PI / 5,
+		},
+		{
+			name: 'book-Dracula',
+			mesh: new Mesh(
+				this.bookGeom.clone(),
+				new MeshPhysicalMaterial({ roughness: 0.7, color: 0xff1111, bumpScale: 0.002, metalness: 0.2 })
+			),
+			glowMesh: this.glowMesh.clone(),
+			bookInfo: this.bookInfos.dracula,
+			initCoordinates: new Vector3(-25, 100, -14),
 			initRotation: Math.PI / 5,
 		},
 	]
@@ -298,6 +315,11 @@ export default class GLTFExample extends Example {
 			this.bookInfos.harryPotter.object = gltf.scene
 			this.bookInfos.harryPotter.object.scale.set(5, 5, 5)
 		})
+
+		loader.load('assets/models/dracula/scene.gltf', (gltf) => {
+			this.bookInfos.dracula.object = gltf.scene
+			this.bookInfos.dracula.object.scale.set(5, 5, 5)
+		})
 	}
 
 	public removeAllGlow() {
@@ -321,7 +343,7 @@ export default class GLTFExample extends Example {
 
 	public update(delta: number): void {
 		this.controls.update()
-		this.story.rotateY(0.001)
+		this.story.rotateY(0.01)
 		this._raycaster.setFromCamera(mouse, this._cam)
 		const intersects = this._raycaster.intersectObjects(this._scene.children, false)
 		if (intersects.length > 0) {
